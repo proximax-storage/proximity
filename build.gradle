@@ -1,0 +1,137 @@
+/*
+ * Copyright 2020 ProximaX
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+plugins {
+    // main language plugin
+    id 'war'
+    // code coverage reporting
+    id 'jacoco'
+    // integrate coverage with github
+    id 'com.github.kt3k.coveralls' version '2.8.4'
+    // generator for the web services
+    id "org.openapi.generator" version "4.2.2"
+}
+
+// Java8
+sourceCompatibility = 1.8
+
+// add generated code to the man sources et
+sourceSets {
+    main {
+    	java {
+    		srcDirs += [ 'src/gen/java' ]
+    	}
+    }
+}
+
+// take dependencies from maven central
+repositories {
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+    mavenCentral()
+    jcenter()
+}
+
+// Make all tests use JUnit 5
+tasks.withType(Test) {
+    useJUnitPlatform()
+}
+
+// versions of dependencies
+ext {
+    junitVersion = '5.6.0'
+    rootPackage = 'io.proximax.proximity'
+    jerseyVersion = '2.30.1'
+}
+
+openApiGenerate {
+    generatorName = "jaxrs-spec"
+    inputSpec = "$rootDir/schemas/proximity_api.yaml".toString()
+    outputDir = "$buildDir/generated".toString()
+    apiPackage = "${rootPackage}.v1.api"
+    invokerPackage = "${rootPackage}.v1.invoker"
+    modelPackage = "${rootPackage}.v1.model"
+    generateAliasAsModel = true
+    validateSpec = false
+    skipValidateSpec = true
+    configOptions = [
+        dateLibrary: "java8"
+    ]
+}
+
+dependencies {
+    // use java DFMS API to handle interaction with dfms
+    compile('io.proximax:java-xpx-dfms-api-http:0.1.0-SNAPSHOT') {
+    	exclude group: 'org.apache.logging.log4j'
+    }
+    
+    // Shiro for security
+    compile 'org.apache.shiro:shiro-servlet-plugin:1.5.2'
+    compile 'org.apache.shiro:shiro-jaxrs:1.5.2'
+    // JWT for request authentication
+    compile 'io.jsonwebtoken:jjwt:0.9.1'
+    
+    // hibernate as JPA implementation
+    compile 'org.hibernate:hibernate-core:5.4.14.Final'
+    // mariadb as datastore for ORM
+	runtime 'org.mariadb.jdbc:mariadb-java-client:2.6.0'
+	
+    // servlet and jaxrs apis
+    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+    providedCompile 'javax.ws.rs:javax.ws.rs-api:2.1.1'
+
+	// need to send e-mails for email validations
+	compile 'org.apache.commons:commons-email:1.5'
+	compile 'commons-validator:commons-validator:1.6'
+	
+    // grizzly to run as standalone app
+    compile "org.glassfish.jersey.containers:jersey-container-grizzly2-http:${jerseyVersion}"
+    // jersey to run in container
+    compile "org.glassfish.jersey.core:jersey-server:${jerseyVersion}"
+    compile "org.glassfish.jersey.containers:jersey-container-servlet:${jerseyVersion}"
+    // content types
+    compile "org.glassfish.jersey.media:jersey-media-multipart:${jerseyVersion}"
+    compile "org.glassfish.jersey.media:jersey-media-json-jackson:${jerseyVersion}"
+	// injector for jersey
+	runtime "org.glassfish.jersey.inject:jersey-hk2:${jerseyVersion}"
+	
+	// generated code has some swagger extras
+    compile 'io.swagger:swagger-annotations:1.5.22'
+	// DTO serialization
+    compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.10.3'
+
+	// logging facade
+	compile 'org.slf4j:slf4j-api:1.7.30'
+	runtime 'org.slf4j:jcl-over-slf4j:1.7.30'
+	// logging implementation
+	runtime 'ch.qos.logback:logback-classic:1.2.3'
+    
+    // validations
+    compile 'org.apache.commons:commons-lang3:3.9'
+    compile 'org.apache.commons:commons-math3:3.6.1'
+    compile 'commons-io:commons-io:2.6'
+	compile 'commons-codec:commons-codec:1.13'
+
+	// mockito for mocking
+    testCompile 'org.mockito:mockito-all:1.9.5'
+    // logging facade and impl
+    // tests
+    testRuntime 'org.junit.platform:junit-platform-launcher:1.6.0'
+    testCompile "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testCompile "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
+    testCompile "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+}

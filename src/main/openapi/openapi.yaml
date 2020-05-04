@@ -1,0 +1,784 @@
+openapi: 3.0.0
+info:
+  description: |
+    DFMS node HTTP API.
+    [Reference implementation in GO](https://github.com/proximax-storage/go-xpx-dfms-api-http)
+    [API definition](https://github.com/proximax-storage/go-xpx-dfms-api)
+
+    API does not tries to follow idiomatic REST or other API patterns for reasons.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: DFMS API
+  version: 1.0.0
+servers:
+- url: https://127.0.0.1/api/v1
+tags:
+- description: Remote access to drive disk.
+  name: DriveApi
+- description: Account operations
+  name: AccountApi
+paths:
+  /drive/add:
+    post:
+      description: |
+        Sends file or directory to remote node which adds it to the path of the contract
+      operationId: driveAdd
+      parameters:
+      - description: |
+          [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. May represent data or Drive.
+        explode: true
+        in: query
+        name: cid
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The destination path.
+        explode: true
+        in: query
+        name: dst
+        required: true
+        schema:
+          default: /
+          type: string
+        style: form
+      - description: To immediately send data to replicators
+        explode: true
+        in: query
+        name: flush
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              description: Multipart might be dynamic and have many subdirectories.
+                Format is taken from [ipfs files](https://github.com/ipfs/go-ipfs-files)
+              format: binary
+              type: string
+        description: File or directory to be added
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDTO'
+          description: Bad Request
+      summary: Add file
+      tags:
+      - DriveApi
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+      x-tags:
+      - tag: DriveApi
+  /drive/get:
+    post:
+      description: |
+        Sends file or directory to remote node which adds it to the path of the contract
+      operationId: driveGet
+      parameters:
+      - description: |
+          [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. May represent data or Drive.
+        explode: true
+        in: query
+        name: cid
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The source path of the file in Drive.
+        explode: true
+        in: query
+        name: src
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: To immediately send data to replicators
+        explode: true
+        in: query
+        name: flush
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                description: Tar encoded file or directory.
+                format: tar
+                type: string
+          description: Success
+          headers:
+            "-X-Stream-Output":
+              explode: false
+              schema:
+                enum:
+                - 1
+                type: integer
+              style: simple
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDTO'
+          description: Bad Request
+      summary: Get file
+      tags:
+      - DriveApi
+      x-accepts: application/json
+      x-tags:
+      - tag: DriveApi
+  /drive/rm:
+    post:
+      description: Remove removes the file or directory from the path
+      operationId: driveRm
+      parameters:
+      - description: |
+          [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. May represent data or Drive.
+        explode: true
+        in: query
+        name: cid
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The source path of the file in Drive.
+        explode: true
+        in: query
+        name: src
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: To immediately send data to replicators
+        explode: true
+        in: query
+        name: flush
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      - description: Delete file from local disk only, but keep reference on it remotely
+        explode: true
+        in: query
+        name: local
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      responses:
+        "200":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDTO'
+          description: Bad Request
+      summary: Remove file
+      tags:
+      - DriveApi
+      x-accepts: application/json
+      x-tags:
+      - tag: DriveApi
+  /drive/mv:
+    post:
+      description: |
+        Move moves file or directory from the givens source path to the given destination path
+        Use also to rename file or directory
+      operationId: driveMv
+      parameters:
+      - description: |
+          [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. May represent data or Drive.
+        explode: true
+        in: query
+        name: cid
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The source path of the file in Drive.
+        explode: true
+        in: query
+        name: src
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: The destination path.
+        explode: true
+        in: query
+        name: dst
+        required: true
+        schema:
+          default: /
+          type: string
+        style: form
+      - description: To immediately send data to replicators
+        explode: true
+        in: query
+        name: flush
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      responses:
+        "200":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDTO'
+          description: Bad Request
+      summary: Move file
+      tags:
+      - DriveApi
+      x-accepts: application/json
+      x-tags:
+      - tag: DriveApi
+  /drive/cp:
+    post:
+      description: |
+        Copy copies file or directory from the givens source path to the given destination path
+        It does not makes the full copy of the file or directory, it just copies the reference
+      operationId: driveCp
+      parameters:
+      - description: |
+          [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. May represent data or Drive.
+        explode: true
+        in: query
+        name: cid
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The source path of the file in Drive.
+        explode: true
+        in: query
+        name: src
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: The destination path.
+        explode: true
+        in: query
+        name: dst
+        required: true
+        schema:
+          default: /
+          type: string
+        style: form
+      - description: To immediately send data to replicators
+        explode: true
+        in: query
+        name: flush
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      responses:
+        "200":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDTO'
+          description: Bad Request
+      summary: Copy file
+      tags:
+      - DriveApi
+      x-accepts: application/json
+      x-tags:
+      - tag: DriveApi
+  /drive/mkdir:
+    post:
+      description: MakeDir creates new directory on the given path
+      operationId: driveMkdir
+      parameters:
+      - description: |
+          [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. May represent data or Drive.
+        explode: true
+        in: query
+        name: cid
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The source path of the file in Drive.
+        explode: true
+        in: query
+        name: src
+        required: true
+        schema:
+          type: string
+        style: form
+      - description: To immediately send data to replicators
+        explode: true
+        in: query
+        name: flush
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      responses:
+        "200":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDTO'
+          description: Bad Request
+      summary: Make directory
+      tags:
+      - DriveApi
+      x-accepts: application/json
+      x-tags:
+      - tag: DriveApi
+  /drive/ls:
+    post:
+      description: Ls returns information about the files and directories under the
+        given path
+      operationId: driveLs
+      parameters:
+      - description: |
+          [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. May represent data or Drive.
+        explode: true
+        in: query
+        name: cid
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The source path of the file in Drive.
+        explode: true
+        in: query
+        name: src
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/statDTO'
+                type: array
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDTO'
+          description: Bad Request
+      summary: List files
+      tags:
+      - DriveApi
+      x-accepts: application/json
+      x-tags:
+      - tag: DriveApi
+  /drive/stat:
+    post:
+      description: Stat returns information about the file or directory under the
+        given path
+      operationId: driveStat
+      parameters:
+      - description: |
+          [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. May represent data or Drive.
+        explode: true
+        in: query
+        name: cid
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The source path of the file in Drive.
+        explode: true
+        in: query
+        name: src
+        required: true
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/statDTO'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDTO'
+          description: Bad Request
+      summary: File information
+      tags:
+      - DriveApi
+      x-accepts: application/json
+      x-tags:
+      - tag: DriveApi
+  /drive/flush:
+    post:
+      description: Flush pushes state of the local Drive to all replicators
+      operationId: driveFlush
+      parameters:
+      - description: |
+          [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. May represent data or Drive.
+        explode: true
+        in: query
+        name: cid
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDTO'
+          description: Bad Request
+      summary: Flush drive
+      tags:
+      - DriveApi
+      x-accepts: application/json
+      x-tags:
+      - tag: DriveApi
+  /account:
+    get:
+      description: retrieve account info for current session
+      operationId: accountGet
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountInfoDTO'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDTO'
+          description: Bad Request
+      summary: Get account information
+      tags:
+      - AccountApi
+      x-accepts: application/json
+      x-tags:
+      - tag: AccountApi
+  /account/register:
+    post:
+      description: Register new account based on provided information
+      operationId: accountRegister
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/accountRequestDTO'
+        description: Registration info
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountInfoDTO'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDTO'
+          description: Bad Request
+      summary: Register new account
+      tags:
+      - AccountApi
+      x-contentType: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: AccountApi
+  /account/login:
+    post:
+      description: Login user using his credentials
+      operationId: accountLogin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/accountLoginDTO'
+        description: Login info
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountInfoDTO'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDTO'
+          description: Bad Request
+      summary: Login user
+      tags:
+      - AccountApi
+      x-contentType: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: AccountApi
+  /account/validate:
+    get:
+      description: Validate account information
+      operationId: accountValidate
+      parameters:
+      - description: Email validation token sent via e-mail
+        explode: true
+        in: query
+        name: emailToken
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountInfoDTO'
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorDTO'
+          description: Bad Request
+      summary: Validate account
+      tags:
+      - AccountApi
+      x-accepts: application/json
+      x-tags:
+      - tag: AccountApi
+components:
+  parameters:
+    cidParam:
+      description: |
+        [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. May represent data or Drive.
+      explode: true
+      in: query
+      name: cid
+      required: false
+      schema:
+        type: string
+      style: form
+    srcParam:
+      description: The source path of the file in Drive.
+      explode: true
+      in: query
+      name: src
+      required: true
+      schema:
+        type: string
+      style: form
+    dstParam:
+      description: The destination path.
+      explode: true
+      in: query
+      name: dst
+      required: true
+      schema:
+        default: /
+        type: string
+      style: form
+    flushParam:
+      description: To immediately send data to replicators
+      explode: true
+      in: query
+      name: flush
+      required: false
+      schema:
+        default: false
+        type: boolean
+      style: form
+    emailToken:
+      description: Email validation token sent via e-mail
+      explode: true
+      in: query
+      name: emailToken
+      required: false
+      schema:
+        type: string
+      style: form
+  responses:
+    errorResp:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorDTO'
+      description: Bad Request
+  schemas:
+    statDTO:
+      description: File statistics
+      example:
+        size: 0
+        name: name
+        type: file
+      properties:
+        name:
+          type: string
+        size:
+          format: uint64
+          type: integer
+        type:
+          enum:
+          - file
+          - dir
+          type: string
+      type: object
+    cidDTO:
+      description: |
+        [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier.
+      type: string
+    contractDTO:
+      properties:
+        drive:
+          description: |
+            [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier.
+          type: string
+        owner:
+          description: Hex encoded public key.
+          type: string
+        replicators:
+          description: Hex encoded public keys.
+          items:
+            type: string
+          type: array
+        root:
+          type: string
+        created:
+          description: Block height when the Contract was started.
+          format: int64
+          type: integer
+        duration:
+          format: int64
+          type: integer
+        space:
+          format: int64
+          type: integer
+        replicas:
+          format: uint16
+          type: integer
+        percentApprovers:
+          format: uint16
+          type: integer
+        billingPrice:
+          format: int64
+          type: integer
+        billingPeriod:
+          format: int
+          type: integer
+      type: object
+    accountRequestDTO:
+      properties:
+        email:
+          description: e-mail address for account verification
+          type: string
+        password:
+          description: account pasword
+          type: string
+      type: object
+    accountLoginDTO:
+      properties:
+        email:
+          description: e-mail address for account verification
+          type: string
+        password:
+          description: account pasword
+          type: string
+      type: object
+    accountInfoDTO:
+      example:
+        id: 0
+        email: email
+        status: new
+        token: token
+      properties:
+        id:
+          description: assigned account ID
+          format: int64
+          type: integer
+        email:
+          description: e-mail address for account verification
+          type: string
+        status:
+          enum:
+          - new
+          - active
+          - inactive
+          type: string
+        token:
+          description: compact form of last JWT token
+          type: string
+      type: object
+    errorDTO:
+      properties:
+        message:
+          description: Error message
+          type: string
+        code:
+          description: |
+            * 0 - Normal - is a normal error. The command failed for some reason that's not a bug.
+            * 1 - Client - means the client made an invalid request.
+            * 2 - Implementation - means there's a bug in the implementation.
+            * 3 - RateLimited - is returned when the operation has been rate-limited.
+            * 4 - Forbidden - is returned when the client doesn't have permission to
+                  perform the requested operation.
+          enum:
+          - 0
+          - 1
+          - 2
+          type: integer
+        type:
+          enum:
+          - error
+          type: string
+      type: object
+    inline_response_200:
+      example:
+        cid: cid
+      properties:
+        cid:
+          description: |
+            [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier.
+          type: string

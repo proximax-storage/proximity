@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"https://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="hibernate.connection.datasource">java:comp/env/jdbc/ProximityDB</property>
+		<property name="hibernate.connection.driver_class">org.mariadb.jdbc.Driver</property>
+		<!-- use JDBC directly
+		    <property name="hibernate.connection.url">jdbc:mariadb://172.17.0.2:3306/ProximityDB</property> 
+			<property name="hibernate.connection.username">proximity</property>
+			<property name="hibernate.connection.password">pass</property> -->
+
+
+		<property name="hibernate.current_session_context_class">thread</property>
+
+		<property name="show_sql">true</property>
+
+		<!-- Mapping with model class containing annotations -->
+		<mapping class="io.proximax.proximity.account.model.Account" />
+	</session-factory>
+</hibernate-configuration>

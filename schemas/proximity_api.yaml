@@ -1,0 +1,485 @@
+openapi: 3.0.0
+servers:
+  - url: https://127.0.0.1/api/v1
+info:
+  description: Proximity API
+  version: "1.0.0"
+  title: Proximity API
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: DriveApi
+    description: Remote access to drive disk.
+  - name: AccountApi
+    description: Account operations
+paths:
+
+#####################
+### DRIVE paths ###
+#####################
+
+  /drive/add:
+    post:
+      tags:
+      - DriveApi
+      summary: Add file
+      description: |
+        Sends file or directory to remote node which adds it to the path of the contract
+      operationId: driveAdd
+      parameters:
+        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/dstParam'
+        - $ref: '#/components/parameters/flushParam'
+      requestBody:
+        description: File or directory to be added
+        required: true
+        content:
+           multipart/form-data:
+            schema:
+              type: string
+              format: binary
+              description: Multipart might be dynamic and have many subdirectories. Format is taken from [ipfs files](https://github.com/ipfs/go-ipfs-files)
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                 cid:
+                  $ref: '#/components/schemas/cidDTO'
+        '400':
+          $ref: '#/components/responses/errorResp'
+  /drive/get:
+    post:
+      tags:
+      - DriveApi
+      summary: Get file
+      description: |
+        Sends file or directory to remote node which adds it to the path of the contract
+      operationId: driveGet
+      parameters:
+        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/srcParam'
+        - $ref: '#/components/parameters/flushParam'
+      responses:
+        '200':
+          description: Success
+          headers:
+            -X-Stream-Output:
+                schema:
+                  type: integer
+                  enum:
+                   - 1
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Tar encoded file or directory.
+                format: tar
+        '400':
+          $ref: '#/components/responses/errorResp'
+  /drive/rm:
+    post:
+      tags:
+      - DriveApi
+      summary: Remove file
+      description: Remove removes the file or directory from the path
+      operationId: driveRm
+      parameters:
+        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/srcParam'
+        - $ref: '#/components/parameters/flushParam'
+        - in: query
+          name: local
+          description: Delete file from local disk only, but keep reference on it remotely
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Success
+        '400':
+          $ref: '#/components/responses/errorResp'
+  /drive/mv:
+    post:
+      tags:
+      - DriveApi
+      summary: Move file
+      description: |
+         Move moves file or directory from the givens source path to the given destination path
+         Use also to rename file or directory
+      operationId: driveMv
+      parameters:
+        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/srcParam'
+        - $ref: '#/components/parameters/dstParam'
+        - $ref: '#/components/parameters/flushParam'
+      responses:
+        '200':
+          description: Success
+        '400':
+          $ref: '#/components/responses/errorResp'
+  /drive/cp:
+    post:
+      tags:
+      - DriveApi
+      summary: Copy file
+      description: |
+         Copy copies file or directory from the givens source path to the given destination path
+         It does not makes the full copy of the file or directory, it just copies the reference
+      operationId: driveCp
+      parameters:
+        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/srcParam'
+        - $ref: '#/components/parameters/dstParam'
+        - $ref: '#/components/parameters/flushParam'
+      responses:
+        '200':
+          description: Success
+        '400':
+          $ref: '#/components/responses/errorResp'
+  /drive/mkdir:
+    post:
+      tags:
+      - DriveApi
+      summary: Make directory
+      description: MakeDir creates new directory on the given path
+      operationId: driveMkdir
+      parameters:
+        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/srcParam'
+        - $ref: '#/components/parameters/flushParam'
+      responses:
+        '200':
+          description: Success
+        '400':
+          $ref: '#/components/responses/errorResp'
+  /drive/ls:
+    post:
+      tags:
+      - DriveApi
+      summary: List files
+      description: Ls returns information about the files and directories under the given path
+      operationId: driveLs
+      parameters:
+        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/srcParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/statDTO'
+        '400':
+          $ref: '#/components/responses/errorResp'
+  /drive/stat:
+    post:
+      tags:
+      - DriveApi
+      summary: File information
+      description: Stat returns information about the file or directory under the given path
+      operationId: driveStat
+      parameters:
+        - $ref: '#/components/parameters/cidParam'
+        - $ref: '#/components/parameters/srcParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/statDTO'
+        '400':
+          $ref: '#/components/responses/errorResp'
+  /drive/flush:
+    post:
+      tags:
+      - DriveApi
+      summary: Flush drive
+      description: Flush pushes state of the local Drive to all replicators
+      operationId: driveFlush
+      parameters:
+        - $ref: '#/components/parameters/cidParam'
+      responses:
+        '200':
+          description: Success
+        '400':
+          $ref: '#/components/responses/errorResp'
+          
+#####################
+### ACCOUNT paths ###
+#####################
+  /account:
+    get:
+      tags:
+      - AccountApi
+      summary: Get account information
+      description: retrieve account info for current session
+      operationId: accountGet
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountInfoDTO'
+  /account/register:
+    post:
+      tags:
+      - AccountApi
+      summary: Register new account
+      description: Register new account based on provided information
+      operationId: accountRegister
+      requestBody:
+        description: Registration info
+        required: true
+        content:
+           application/json:
+            schema:
+              $ref: '#/components/schemas/accountRequestDTO'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountInfoDTO'
+  /account/login:
+    post:
+      tags:
+      - AccountApi
+      summary: Login user
+      description: Login user using his credentials
+      operationId: accountLogin
+      requestBody:
+        description: Login info
+        required: true
+        content:
+           application/json:
+            schema:
+              $ref: '#/components/schemas/accountLoginDTO'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountInfoDTO'
+  /account/validate:
+    get:
+      tags:
+      - AccountApi
+      summary: Validate account
+      description: Validate account information
+      operationId: accountValidate
+      parameters:
+        - $ref: '#/components/parameters/emailToken'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountInfoDTO'
+  /account/tokens:
+    get:
+      tags:
+      - AccountApi
+      summary: Get account tokens
+      description: Developer API to retrieve valid tokens for all supported operations. Remove or very tightly secure this
+      operationId: accountTokens
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accountInfoDTO'
+
+######################
+###   COMPONENTS   ###
+######################
+          
+components:
+
+### RESPONSES
+  responses:
+    errorResp:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorDTO'
+            
+### PARAMETERS
+  parameters:
+    cidParam:
+      in: query
+      name: cid
+      description: |
+        [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. May represent data or Drive.
+      required: false
+      schema:
+        type: string
+    srcParam:
+      in: query
+      name: src
+      description: The source path of the file in Drive.
+      required: true
+      schema:
+        type: string
+    dstParam:
+      in: query
+      name: dst
+      description: The destination path.
+      required: true
+      schema:
+        type: string
+        default: "/"
+    flushParam:
+      in: query
+      name: flush
+      description: To immediately send data to replicators
+      schema:
+        type: boolean
+        default: false
+    emailToken:
+      in: query
+      name: emailToken
+      description: Email validation token sent via e-mail
+      required: false
+      schema:
+        type: string
+
+### DTOs
+  schemas:
+    statDTO:
+      type: object
+      description: File statistics
+      properties:
+        name:
+          type: string
+        size:
+          type: integer
+          format: uint64
+        type:
+          type: string
+          enum:
+            - "file"
+            - "dir"
+    cidDTO:
+      type: string
+      description: |
+        [Cid](https://github.com/multiformats/cid) (version 1) - special content identifier.
+    contractDTO:
+      type: object
+      properties:
+        drive:
+          $ref: '#/components/schemas/cidDTO'
+        owner:
+          type: string
+          description: Hex encoded public key.
+        replicators:
+          type: array
+          description: Hex encoded public keys.
+          items:
+            type: string
+        root:
+          type: string
+        created:
+          type: integer
+          format: int64
+          description: Block height when the Contract was started.
+        duration:
+          type: integer
+          format: int64
+        space:
+          type: integer
+          format: int64
+        replicas:
+          type: integer
+          format: uint16
+        percentApprovers:
+          type: integer
+          format: uint16
+        billingPrice:
+          type: integer
+          format: int64
+        billingPeriod:
+          type: integer
+          format: int
+    accountRequestDTO:
+      type: object
+      properties:
+        email:
+          type: string
+          description: e-mail address for account verification
+        password:
+          type: string
+          description: account pasword
+    accountLoginDTO:
+      type: object
+      properties:
+        email:
+          type: string
+          description: e-mail address for account verification
+        password:
+          type: string
+          description: account pasword
+    accountInfoDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: assigned account ID
+        email:
+          type: string
+          description: e-mail address for account verification
+        status:
+          type: string
+          enum:
+          - "new"
+          - "active"
+          - "inactive"
+        token:
+          type: string
+          description: compact form of last JWT token
+    tokensDTO:
+      type: object
+      properties:
+        authentication:
+          type: string
+          description: newly generated authentication token
+        emailValidation:
+          type: string
+          description: newly generated email validation token
+    errorDTO:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        code:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          description: |
+            * 0 - Normal - is a normal error. The command failed for some reason that's not a bug.
+            * 1 - Client - means the client made an invalid request.
+            * 2 - Implementation - means there's a bug in the implementation.
+            * 3 - RateLimited - is returned when the operation has been rate-limited.
+            * 4 - Forbidden - is returned when the client doesn't have permission to
+                  perform the requested operation.
+        type:
+          type: string
+          enum:
+          - "error"
