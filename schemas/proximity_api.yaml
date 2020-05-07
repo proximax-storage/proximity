@@ -211,7 +211,21 @@ paths:
           description: Success
         '400':
           $ref: '#/components/responses/errorResp'
-          
+  /drive/dashboard:
+    get:
+      tags:
+      - DriveApi
+      summary: dashboard information
+      description: retrieve statistics for the account
+      operationId: dashboardGet
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/dashboardDTO'
+
 #####################
 ### ACCOUNT paths ###
 #####################
@@ -460,6 +474,12 @@ components:
         emailValidation:
           type: string
           description: newly generated email validation token
+    dashboardDTO:
+      type: object
+      properties:
+        hello:
+          type: string
+          description: hello world implementation
     errorDTO:
       type: object
       properties:

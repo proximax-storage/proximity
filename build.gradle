@@ -80,8 +80,8 @@ dependencies {
     }
     
     // Shiro for security
-    compile 'org.apache.shiro:shiro-servlet-plugin:1.5.2'
     compile 'org.apache.shiro:shiro-jaxrs:1.5.2'
+    compile 'org.apache.shiro:shiro-web:1.5.2'
     // JWT for request authentication
     compile 'io.jsonwebtoken:jjwt:0.9.1'
     

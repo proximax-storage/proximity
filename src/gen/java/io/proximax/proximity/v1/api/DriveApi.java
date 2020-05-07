@@ -1,5 +1,6 @@
 package io.proximax.proximity.v1.api;
 
+import io.proximax.proximity.v1.model.DashboardDTO;
 import io.proximax.proximity.v1.model.ErrorDTO;
 import io.proximax.proximity.v1.model.InlineResponse200;
 import io.proximax.proximity.v1.model.StatDTO;
@@ -17,8 +18,19 @@ import javax.validation.Valid;
 
 @Path("/drive")
 @Api(description = "the drive API")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-04T21:57:37.589+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-07T21:14:05.934+02:00[Europe/Prague]")
 public class DriveApi {
+
+    @GET
+    @Path("/dashboard")
+    @Produces({ "application/json" })
+    @ApiOperation(value = "dashboard information", notes = "retrieve statistics for the account", response = DashboardDTO.class, tags={ "DriveApi",  })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "Success", response = DashboardDTO.class)
+    })
+    public Response dashboardGet() {
+        return Response.ok().entity("magic!").build();
+    }
 
     @POST
     @Path("/add")

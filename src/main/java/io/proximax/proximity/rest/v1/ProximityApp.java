@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.UriBuilder;
 
 import org.apache.shiro.web.jaxrs.ShiroAnnotationFilterFeature;
@@ -18,6 +19,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 
 import io.proximax.proximity.exception.ProximityExceptionMapper;
 import io.proximax.proximity.rest.v1.resources.AccountResource;
+import io.proximax.proximity.rest.v1.resources.DriveResource;
 import io.proximax.proximity.util.HibernateSessionFactoryFactory;
 import io.proximax.proximity.v1.invoker.RestApplication;
 
@@ -25,6 +27,7 @@ import io.proximax.proximity.v1.invoker.RestApplication;
  * @author tono
  *
  */
+@ApplicationPath("/api/v1")
 public class ProximityApp extends RestApplication {
 
    @Override
@@ -37,6 +40,7 @@ public class ProximityApp extends RestApplication {
       classes.add(ShiroAnnotationFilterFeature.class);
       // add resources
       classes.add(AccountResource.class);
+      classes.add(DriveResource.class);
       // return the classes
       return classes;
    }

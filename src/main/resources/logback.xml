@@ -18,10 +18,9 @@
 		</encoder>
 	</appender>
 
-	<root level="debug">
+	<root level="info">
 		<appender-ref ref="STDOUT" />
 	</root>
 	
-	<logger name="org.hibernate" level="warn"></logger>
-	<logger name="rg.apache.shiro" level="info"></logger>
+	<logger name="io.proximax.proximity" level="debug"></logger>
 </configuration>

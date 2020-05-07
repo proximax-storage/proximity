@@ -2,17 +2,39 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	version="3.1">
-	
+
+	<listener>
+		<listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
+	</listener>
+
+	<filter>
+		<filter-name>ShiroFilter</filter-name>
+		<filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>ShiroFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+		<dispatcher>ASYNC</dispatcher>
+	</filter-mapping>
+
 	<!-- load the actual application servlet -->
-    <servlet>
-        <display-name>Proximity Servlet v1</display-name>
-        <!-- name of the servlet declares jaxrs application class -->
-        <servlet-name>io.proximax.proximity.rest.v1.ProximityApp</servlet-name>
-        <!-- declare that generated RestApplication class is handled by this servlet -->
-        <init-param>
-        	<param-name>javax.ws.rs.Application</param-name>
-        	<param-value>io.proximax.proximity.v1.invoker.RestApplication</param-value>
-        </init-param>
-    </servlet>
-    
+	<servlet>
+		<display-name>Proximity Servlet v1</display-name>
+		<!-- name of the servlet declares jaxrs application class -->
+		<servlet-name>io.proximax.proximity.rest.v1.ProximityApp</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		
+		<!-- declare that generated RestApplication class is handled by this servlet -->
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>io.proximax.proximity.rest.v1.ProximityApp</param-value>
+		</init-param>
+	</servlet>
+
 </web-app>

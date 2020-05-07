@@ -19,6 +19,7 @@ import org.hibernate.SessionFactory;
 import io.proximax.proximity.account.AccountRepository;
 import io.proximax.proximity.account.model.Account;
 import io.proximax.proximity.account.model.ValidationStatus;
+import io.proximax.proximity.security.ProximityPasswordMatcher;
 
 /**
  * Realm performing authentication based on the specified user name and password
@@ -30,6 +31,7 @@ public class UserPasswordRealm extends AuthorizingRealm {
     */
    public UserPasswordRealm() {
       setAuthenticationTokenClass(UsernamePasswordToken.class);
+      setCredentialsMatcher(new ProximityPasswordMatcher());
    }
 
    @Override

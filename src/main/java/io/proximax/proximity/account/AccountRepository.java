@@ -14,7 +14,6 @@ import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -28,7 +27,9 @@ import io.proximax.proximity.account.model.AccountStatus;
 import io.proximax.proximity.account.model.ValidationStatus;
 import io.proximax.proximity.exception.ProximityException;
 import io.proximax.proximity.exception.ProximityExceptionType;
+import io.proximax.proximity.security.ProximityPasswordMatcher;
 import io.proximax.proximity.security.jwt.JWTSecurityUtils;
+import io.proximax.proximity.security.userpass.UserPasswordRealm;
 import io.proximax.proximity.util.HibernateUtil;
 
 /**
@@ -38,13 +39,14 @@ import io.proximax.proximity.util.HibernateUtil;
 public class AccountRepository {
    private static final Logger logger = LoggerFactory.getLogger(AccountRepository.class);
 
-   // TODO inject from central configuration
-   private final PasswordService passSvc = new DefaultPasswordService();
+   /** password service used also with {@link UserPasswordRealm} */
+   private final PasswordService passSvc = new ProximityPasswordMatcher().getPasswordService();
 
    /**
-    * @param sessionFactory
+    * bean constructor
     */
    public AccountRepository() {
+      // no extra init
    }
 
    /**
@@ -165,16 +167,30 @@ public class AccountRepository {
       email.setSubject("New Proximity registration");
 
       String mailToken = JWTSecurityUtils.createEmailValidationToken(mailAddress);
-      // TODO remove hard coded data + support localization
-      String verificationLink = "http://localhost:8080/proximity/api/v1/account/validate?emailToken=" + mailToken;
+      // generate verification link
+      String verificationLink = getEmailValidationLink(ProximityProperty.SYSTEM_BASE_URL.getValue(),
+            "/api/v1",
+            mailToken);
+
       // set the HTML message
       email.setHtmlMsg("<html>please click this link to confirm your email address: <a href=\"" + verificationLink
             + "\">" + verificationLink + "</a></html>");
-
       // set the alternative message
       email.setTextMsg("Open " + verificationLink + " in browser to validate your account");
 
       // send the email
       email.send();
+   }
+
+   /**
+    * get link that can be used to validate e-mail
+    * 
+    * @param baseUrl
+    * @param appPath
+    * @param validationtoken
+    * @return
+    */
+   protected static String getEmailValidationLink(String baseUrl, String appPath, String validationtoken) {
+      return String.format("%s%s/account/validate?emailToken=%s", baseUrl, appPath, validationtoken);
    }
 }
