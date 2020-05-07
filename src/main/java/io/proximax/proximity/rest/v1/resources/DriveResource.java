@@ -3,12 +3,9 @@
  */
 package io.proximax.proximity.rest.v1.resources;
 
-import static io.proximax.dfms.utils.HttpUtils.encode;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.Buffer;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,22 +22,12 @@ import io.proximax.dfms.DriveRepository;
 import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.cid.multibase.Multibase;
-import io.proximax.dfms.http.MultipartRequestContent;
 import io.proximax.dfms.http.dtos.CidDTO;
-import io.proximax.dfms.http.repos.DriveHttp;
 import io.proximax.dfms.model.drive.DriveContent;
-import io.proximax.dfms.model.drive.content.BaseContent;
-import io.proximax.dfms.model.drive.content.InputStreamContent;
 import io.proximax.dfms.model.drive.content.RawInputStreamContent;
 import io.proximax.proximity.v1.api.DriveApi;
 import io.proximax.proximity.v1.model.DashboardDTO;
-import io.reactivex.Observable;
-import okhttp3.HttpUrl;
 import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okio.BufferedSink;
 
 /**
  * @author tono
@@ -57,8 +44,9 @@ public class DriveResource extends DriveApi {
     */
    public DriveResource() {
       // bean constructor
-   }
+   }  
 
+   @RequiresAuthentication
    @Override
    public Response driveAdd(@NotNull String dst, String cid, Boolean flush) {
       try {

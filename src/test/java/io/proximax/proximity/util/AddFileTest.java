@@ -62,7 +62,9 @@ class AddFileTest {
       
       public Observable<Cid> add(Cid id, String path, DriveContent content) throws IOException {
          HttpUrl url = buildUrl("drive/add", id, path).build();
-         Request request = new Request.Builder().url(url).post(new MultipartRequestContent(content, MultipartRequestContent.createBoundary())).build();
+         String authHeader = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhdXRoZW50aWNhdGlvbiIsInN1YiI6InRvbm82QGxhbGEuaW8iLCJleHAiOjE1ODg5NzgzNDZ9.cG5NJ7Uo2UOB6rUvM-9dCiDX9km98welxXM-Ncxw8bI";
+         Request request = new Request.Builder().url(url).header("Authorization", authHeader).post(new MultipartRequestContent(content, MultipartRequestContent.createBoundary())).build();
+
          // make the request
          return makeRequest(request).map(this::mapStringOrError).map(TestRepo::log).map(str -> getGson().fromJson(str, CidDTO2.class))
                .map(CidDTO2::getId).map(Cid::decode);
