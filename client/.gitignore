@@ -1,0 +1,12 @@
+# Gradle files
+/build/
+/.gradle/
+
+# Eclipse files and folders
+/.settings/
+/bin/
+/.classpath
+/.project
+
+# other
+/logs/
