@@ -37,6 +37,11 @@ sourceSets {
     }
 }
 
+// build artifact customizations
+war {
+	// rename war to exclude version
+    archiveName = 'proximity.war'
+}
 // take dependencies from maven central
 repositories {
     maven {
@@ -56,6 +61,7 @@ ext {
     junitVersion = '5.6.0'
     rootPackage = 'io.proximax.proximity'
     jerseyVersion = '2.30.1'
+    okHttp3Version = '4.4.1'
 }
 
 openApiGenerate {
@@ -134,4 +140,7 @@ dependencies {
     testCompile "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
     testCompile "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
     testCompile "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    
+    testCompile "com.squareup.okhttp3:okhttp:${okHttp3Version}"
+    testCompile 'com.google.code.gson:gson:2.8.5'
 }

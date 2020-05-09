@@ -20,7 +20,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import io.proximax.proximity.exception.ProximityExceptionMapper;
 import io.proximax.proximity.rest.v1.resources.AccountResource;
 import io.proximax.proximity.rest.v1.resources.DriveResource;
-import io.proximax.proximity.util.HibernateSessionFactoryFactory;
+import io.proximax.proximity.util.StorageApiFactory;
 import io.proximax.proximity.v1.invoker.RestApplication;
 
 /**
@@ -49,7 +49,7 @@ public class ProximityApp extends RestApplication {
    public Set<Object> getSingletons() {
       Set<Object> singletons = new HashSet<>();
       // add binder for Hibernate SessionFactory so it can be injected to resources
-      singletons.add(new HibernateSessionFactoryFactory.Binder());
+      singletons.add(new StorageApiFactory.Binder());
       return singletons;
    }
 

@@ -12,6 +12,7 @@ import io.proximax.proximity.exception.ProximityExceptionType;
  */
 public enum ProximityProperty {
    SYSTEM_BASE_URL("proximity_system_base_url", true),
+   SYSTEM_STORAGE_API_URL("proximity_system_storage_api_url", false),
    JWT_SECRET("proximity_jwt_secret", false),
    MAIL_HOST("proximity_mail_host", true),
    MAIL_SENDER_MAIL("proximity_mail_sender_mail", true),

@@ -5,9 +5,9 @@ package io.proximax.proximity.rest.v1.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Optional;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Path;
@@ -17,6 +17,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.proximax.dfms.DriveRepository;
 import io.proximax.dfms.StorageApi;
@@ -27,7 +29,6 @@ import io.proximax.dfms.model.drive.DriveContent;
 import io.proximax.dfms.model.drive.content.RawInputStreamContent;
 import io.proximax.proximity.v1.api.DriveApi;
 import io.proximax.proximity.v1.model.DashboardDTO;
-import okhttp3.MediaType;
 
 /**
  * @author tono
@@ -35,9 +36,12 @@ import okhttp3.MediaType;
  */
 @Path("/drive")
 public class DriveResource extends DriveApi {
+   private static final Logger logger = LoggerFactory.getLogger(DriveResource.class);
 
    @Context
    private HttpServletRequest httpRequest;
+   @Inject
+   private StorageApi api;
    
    /**
     * 
@@ -52,14 +56,14 @@ public class DriveResource extends DriveApi {
       try {
          String contentType = httpRequest.getContentType();
          InputStream body = httpRequest.getInputStream();
-         DriveContent content = new RawInputStreamContent(Optional.empty(), body, MediaType.get(contentType));
-         StorageApi api = new StorageApi(new URL("http://localhost:6366"));
+         DriveContent content = new RawInputStreamContent(Optional.empty(), body, contentType);
          DriveRepository drive = api.createDriveRepository();
          Cid resp = drive.add(Cid.decode(cid), dst, content).blockingFirst();
          CidDTO cidDto = new CidDTO(resp.encode(Multibase.BASE_58_BTC));
          return Response.ok(cidDto).build();
       } catch (IOException e) {
-         throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).build());
+         logger.warn("Failed to process request", e);
+         throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
       }
    }
    

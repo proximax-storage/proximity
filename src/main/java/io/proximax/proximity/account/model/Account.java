@@ -3,21 +3,9 @@
  */
 package io.proximax.proximity.account.model;
 
-import java.util.Set;
+import java.util.List;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 @Entity
 @Table(name="accounts", 
@@ -46,10 +34,8 @@ public class Account {
    @Enumerated(EnumType.STRING)
    private AccountStatus status;
    
-   @ElementCollection(fetch = FetchType.EAGER)
-   @CollectionTable(name="permissions", joinColumns=@JoinColumn(name="account_id"))
-   @Column(name="permission")
-   private Set<String> permissions;
+   @OneToMany
+   private List<ContractAssignment> contracts;
    
    /**
     * 
@@ -57,21 +43,22 @@ public class Account {
    public Account() {}
 
    /**
+    * @param id
     * @param email
     * @param emailValidation
     * @param passwordHash
     * @param token
     * @param status
-    * @param permissions
+    * @param contracts
     */
    public Account(String email, ValidationStatus emailValidation, String passwordHash, String token,
-         AccountStatus status, Set<String> permissions) {
+         AccountStatus status, List<ContractAssignment> contracts) {
       this.email = email;
       this.emailValidation = emailValidation;
       this.passwordHash = passwordHash;
       this.token = token;
       this.status = status;
-      this.permissions = permissions;
+      this.contracts = contracts;
    }
 
    /**
@@ -159,17 +146,17 @@ public class Account {
    }
 
    /**
-    * @return the permissions
+    * @return the contracts
     */
-   public Set<String> getPermissions() {
-      return permissions;
+   public List<ContractAssignment> getContracts() {
+      return contracts;
    }
 
    /**
-    * @param permissions the permissions to set
+    * @param contracts the contracts to set
     */
-   public void setPermissions(Set<String> permissions) {
-      this.permissions = permissions;
+   public void setContracts(List<ContractAssignment> contracts) {
+      this.contracts = contracts;
    }
-   
+
 }

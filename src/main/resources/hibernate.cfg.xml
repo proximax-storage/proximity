@@ -20,5 +20,7 @@
 
 		<!-- Mapping with model class containing annotations -->
 		<mapping class="io.proximax.proximity.account.model.Account" />
+		<mapping
+			class="io.proximax.proximity.account.model.ContractAssignment" />
 	</session-factory>
 </hibernate-configuration>

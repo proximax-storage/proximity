@@ -3,7 +3,7 @@
  */
 package io.proximax.proximity.account;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import io.proximax.proximity.ProximityProperty;
 import io.proximax.proximity.account.model.Account;
 import io.proximax.proximity.account.model.AccountStatus;
+import io.proximax.proximity.account.model.ContractAssignment;
 import io.proximax.proximity.account.model.ValidationStatus;
 import io.proximax.proximity.exception.ProximityException;
 import io.proximax.proximity.exception.ProximityExceptionType;
@@ -64,12 +65,8 @@ public class AccountRepository {
          throw new ProximityException(ProximityExceptionType.BAD_REQUEST, email + " is not valid email address");
       }
       final String login = email.toLowerCase();
-      // create account
-      String token = JWTSecurityUtils.createAuthToken(login);
-      Account info = new Account(login, ValidationStatus.NOT_VALIDATED, passSvc.encryptPassword(password), token,
-            AccountStatus.ACTIVE, Collections.emptySet());
       // store account
-      storeAccount(session, info);
+      Account info = generateNewAccount(session, login, password);
       // send e-mail validation request
       try {
          sendEmailToken(login);
@@ -80,6 +77,11 @@ public class AccountRepository {
       return info;
    }
 
+   protected ContractAssignment createNewContract() {
+      // TODO need to generate new default contract for every new account
+      return new ContractAssignment("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
+   }
+   
    /**
     * login the user using specified credentials
     * 
@@ -103,15 +105,28 @@ public class AccountRepository {
    }
 
    /**
-    * store new account to the database
+    * generate new account with default information
     * 
-    * @param info the account info
+    * @param session
+    * @param login
+    * @param password
+    * @return
     */
-   public void storeAccount(Session session, Account info) {
+   protected Account generateNewAccount(Session session, String login, String password) {
       Transaction tx = session.beginTransaction();
       try {
+         // create JWT
+         String token = JWTSecurityUtils.createAuthToken(login);
+         // create contract and add it to the session
+         ContractAssignment defaultContract = createNewContract();
+         session.save(defaultContract);
+         // create account
+         Account info = new Account(login, ValidationStatus.NOT_VALIDATED, passSvc.encryptPassword(password), token,
+               AccountStatus.ACTIVE, Arrays.asList(defaultContract));
          session.save(info);
+         // commit the transaction
          tx.commit();
+         return info;
       } catch (HibernateException e) {
          HibernateUtil.rollback(tx);
          throw e;
