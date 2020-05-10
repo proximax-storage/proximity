@@ -14,9 +14,6 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.schema.TargetType;
 
-import io.proximax.proximity.account.AccountRepository;
-import io.proximax.proximity.rest.v1.ProximityApp;
-
 /**
  * @author tono
  *
@@ -48,9 +45,9 @@ public class SchemaGen {
          throw new RuntimeException("failed to create session factory", e);
       }
 
-      File output = new File("schemas/database.sql");
+      File output = new File("server/schemas/database.sql");
       if (!output.delete()) {
-         throw new IllegalStateException("Failed to delete olf DB file");
+         throw new IllegalStateException("Failed to delete old DB file");
       }
       
       SchemaExport export = new SchemaExport();
