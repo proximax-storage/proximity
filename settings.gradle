@@ -17,4 +17,4 @@
 
 rootProject.name = 'proximity'
 
-include ':server', ':client'
+include ':server', ':client', ':docs'

@@ -9,9 +9,9 @@ info:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 tags:
-  - name: DriveApi
+  - name: Drive
     description: Remote access to drive disk.
-  - name: AccountApi
+  - name: Account
     description: Account operations
 paths:
 
@@ -22,7 +22,7 @@ paths:
   /drive/add:
     post:
       tags:
-      - DriveApi
+      - Drive
       summary: Add file
       description: |
         Sends file or directory to remote node which adds it to the path of the contract
@@ -55,7 +55,7 @@ paths:
   /drive/get:
     post:
       tags:
-      - DriveApi
+      - Drive
       summary: Get file
       description: |
         Sends file or directory to remote node which adds it to the path of the contract
@@ -84,7 +84,7 @@ paths:
   /drive/rm:
     post:
       tags:
-      - DriveApi
+      - Drive
       summary: Remove file
       description: Remove removes the file or directory from the path
       operationId: driveRm
@@ -106,7 +106,7 @@ paths:
   /drive/mv:
     post:
       tags:
-      - DriveApi
+      - Drive
       summary: Move file
       description: |
          Move moves file or directory from the givens source path to the given destination path
@@ -125,7 +125,7 @@ paths:
   /drive/cp:
     post:
       tags:
-      - DriveApi
+      - Drive
       summary: Copy file
       description: |
          Copy copies file or directory from the givens source path to the given destination path
@@ -144,7 +144,7 @@ paths:
   /drive/mkdir:
     post:
       tags:
-      - DriveApi
+      - Drive
       summary: Make directory
       description: MakeDir creates new directory on the given path
       operationId: driveMkdir
@@ -160,7 +160,7 @@ paths:
   /drive/ls:
     post:
       tags:
-      - DriveApi
+      - Drive
       summary: List files
       description: Ls returns information about the files and directories under the given path
       operationId: driveLs
@@ -181,7 +181,7 @@ paths:
   /drive/stat:
     post:
       tags:
-      - DriveApi
+      - Drive
       summary: File information
       description: Stat returns information about the file or directory under the given path
       operationId: driveStat
@@ -200,7 +200,7 @@ paths:
   /drive/flush:
     post:
       tags:
-      - DriveApi
+      - Drive
       summary: Flush drive
       description: Flush pushes state of the local Drive to all replicators
       operationId: driveFlush
@@ -214,7 +214,7 @@ paths:
   /drive/dashboard:
     get:
       tags:
-      - DriveApi
+      - Drive
       summary: dashboard information
       description: retrieve statistics for the account
       operationId: dashboardGet
@@ -232,7 +232,7 @@ paths:
   /account:
     get:
       tags:
-      - AccountApi
+      - Account
       summary: Get account information
       description: retrieve account info for current session
       operationId: accountGet
@@ -246,7 +246,7 @@ paths:
   /account/register:
     post:
       tags:
-      - AccountApi
+      - Account
       summary: Register new account
       description: Register new account based on provided information
       operationId: accountRegister
@@ -267,7 +267,7 @@ paths:
   /account/login:
     post:
       tags:
-      - AccountApi
+      - Account
       summary: Login user
       description: Login user using his credentials
       operationId: accountLogin
@@ -288,7 +288,7 @@ paths:
   /account/validate:
     get:
       tags:
-      - AccountApi
+      - Account
       summary: Validate account
       description: Validate account information
       operationId: accountValidate
@@ -304,7 +304,7 @@ paths:
   /account/tokens:
     get:
       tags:
-      - AccountApi
+      - Account
       summary: Get account tokens
       description: Developer API to retrieve valid tokens for all supported operations. Remove or very tightly secure this
       operationId: accountTokens

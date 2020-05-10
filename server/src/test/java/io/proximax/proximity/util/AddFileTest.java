@@ -54,6 +54,11 @@ class AddFileTest {
       assertEquals(2, items.size());
    }
 
+   /**
+    * 
+    * @author tono
+    *
+    */
    static class TestRepo extends HttpRepository<TestNode> {
 
       protected TestRepo() {
@@ -82,6 +87,11 @@ class AddFileTest {
          return builder;
       }
       
+      /**
+       * 
+       * @author tono
+       *
+       */
       static class CidDTO2 {
          @SerializedName("id")
          private final String id;
@@ -103,6 +113,11 @@ class AddFileTest {
 
    }
    
+   /**
+    * 
+    * @author tono
+    *
+    */
    static class TestNode implements ServiceNode {
 
       @Override
