@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * AccountInfoDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-10T23:36:38.647+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-11T00:03:28.331+02:00[Europe/Prague]")
 public class AccountInfoDTO {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)

@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * TokensDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-10T23:36:38.647+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-11T00:03:28.331+02:00[Europe/Prague]")
 public class TokensDTO {
   public static final String SERIALIZED_NAME_AUTHENTICATION = "authentication";
   @SerializedName(SERIALIZED_NAME_AUTHENTICATION)

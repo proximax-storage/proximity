@@ -13,7 +13,7 @@
 
 package io.proximax.proximity.client.invoker;
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-10T23:36:38.647+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-11T00:03:28.331+02:00[Europe/Prague]")
 public class StringUtil {
   /**
    * Check if the given array contains the given value (with case-insensitive comparison).

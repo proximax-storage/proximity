@@ -27,7 +27,7 @@ import java.io.IOException;
 /**
  * DashboardDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-10T23:36:38.647+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-11T00:03:28.331+02:00[Europe/Prague]")
 public class DashboardDTO {
   public static final String SERIALIZED_NAME_HELLO = "hello";
   @SerializedName(SERIALIZED_NAME_HELLO)
