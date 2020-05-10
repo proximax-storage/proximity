@@ -17,12 +17,14 @@ import javax.validation.Valid;
 
 @Path("/account")
 @Api(description = "the account API")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-10T23:36:39.076+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-11T00:03:29.380+02:00[Europe/Prague]")
 public class AccountApi {
 
     @GET
     @Produces({ "application/json" })
-    @ApiOperation(value = "Get account information", notes = "retrieve account info for current session", response = AccountInfoDTO.class, tags={ "Account",  })
+    @ApiOperation(value = "Get account information", notes = "retrieve account info for current session", response = AccountInfoDTO.class, authorizations = {
+        @Authorization(value = "bearerTokenAuth")
+    }, tags={ "Account",  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = AccountInfoDTO.class)
     })
@@ -34,7 +36,9 @@ public class AccountApi {
     @Path("/login")
     @Consumes({ "application/json" })
     @Produces({ "application/json" })
-    @ApiOperation(value = "Login user", notes = "Login user using his credentials", response = AccountInfoDTO.class, tags={ "Account",  })
+    @ApiOperation(value = "Login user", notes = "Login user using his credentials", response = AccountInfoDTO.class, authorizations = {
+        @Authorization(value = "bearerTokenAuth")
+    }, tags={ "Account",  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = AccountInfoDTO.class)
     })
@@ -46,7 +50,9 @@ public class AccountApi {
     @Path("/register")
     @Consumes({ "application/json" })
     @Produces({ "application/json" })
-    @ApiOperation(value = "Register new account", notes = "Register new account based on provided information", response = AccountInfoDTO.class, tags={ "Account",  })
+    @ApiOperation(value = "Register new account", notes = "Register new account based on provided information", response = AccountInfoDTO.class, authorizations = {
+        @Authorization(value = "bearerTokenAuth")
+    }, tags={ "Account",  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = AccountInfoDTO.class)
     })
@@ -57,7 +63,9 @@ public class AccountApi {
     @GET
     @Path("/tokens")
     @Produces({ "application/json" })
-    @ApiOperation(value = "Get account tokens", notes = "Developer API to retrieve valid tokens for all supported operations. Remove or very tightly secure this", response = AccountInfoDTO.class, tags={ "Account",  })
+    @ApiOperation(value = "Get account tokens", notes = "Developer API to retrieve valid tokens for all supported operations. Remove or very tightly secure this", response = AccountInfoDTO.class, authorizations = {
+        @Authorization(value = "bearerTokenAuth")
+    }, tags={ "Account",  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = AccountInfoDTO.class)
     })
@@ -68,7 +76,9 @@ public class AccountApi {
     @GET
     @Path("/validate")
     @Produces({ "application/json" })
-    @ApiOperation(value = "Validate account", notes = "Validate account information", response = AccountInfoDTO.class, tags={ "Account" })
+    @ApiOperation(value = "Validate account", notes = "Validate account information", response = AccountInfoDTO.class, authorizations = {
+        @Authorization(value = "bearerTokenAuth")
+    }, tags={ "Account" })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = AccountInfoDTO.class)
     })

@@ -11,11 +11,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-
 /**
  * File statistics
  **/
 @ApiModel(description = "File statistics")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-11T00:03:29.380+02:00[Europe/Prague]")
 public class StatDTO   {
   
   private @Valid String name;
@@ -63,16 +63,17 @@ public enum TypeEnum {
   }
 
   
+
+  
   @ApiModelProperty(value = "")
   @JsonProperty("name")
   public String getName() {
     return name;
   }
+
   public void setName(String name) {
     this.name = name;
-  }
-
-  /**
+  }/**
    **/
   public StatDTO size(Integer size) {
     this.size = size;
@@ -80,16 +81,17 @@ public enum TypeEnum {
   }
 
   
+
+  
   @ApiModelProperty(value = "")
   @JsonProperty("size")
   public Integer getSize() {
     return size;
   }
+
   public void setSize(Integer size) {
     this.size = size;
-  }
-
-  /**
+  }/**
    **/
   public StatDTO type(TypeEnum type) {
     this.type = type;
@@ -97,15 +99,17 @@ public enum TypeEnum {
   }
 
   
+
+  
   @ApiModelProperty(value = "")
   @JsonProperty("type")
   public TypeEnum getType() {
     return type;
   }
+
   public void setType(TypeEnum type) {
     this.type = type;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -148,5 +152,7 @@ public enum TypeEnum {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+
 }
 

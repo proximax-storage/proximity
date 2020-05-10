@@ -22,7 +22,7 @@ plugins {
     // integrate coverage with github
     id 'com.github.kt3k.coveralls' version '2.8.4'
     // generator for the web services
-    id "org.openapi.generator" version "4.2.2"
+    id "org.openapi.generator" version "4.3.1"
 }
 
 // Java8

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-11T00:03:29.380+02:00[Europe/Prague]")
 public class AccountInfoDTO   {
   
   private @Valid Long id;
@@ -62,16 +63,17 @@ public enum StatusEnum {
   }
 
   
+
+  
   @ApiModelProperty(value = "assigned account ID")
   @JsonProperty("id")
   public Long getId() {
     return id;
   }
+
   public void setId(Long id) {
     this.id = id;
-  }
-
-  /**
+  }/**
    * e-mail address for account verification
    **/
   public AccountInfoDTO email(String email) {
@@ -80,16 +82,17 @@ public enum StatusEnum {
   }
 
   
+
+  
   @ApiModelProperty(value = "e-mail address for account verification")
   @JsonProperty("email")
   public String getEmail() {
     return email;
   }
+
   public void setEmail(String email) {
     this.email = email;
-  }
-
-  /**
+  }/**
    **/
   public AccountInfoDTO status(StatusEnum status) {
     this.status = status;
@@ -97,16 +100,17 @@ public enum StatusEnum {
   }
 
   
+
+  
   @ApiModelProperty(value = "")
   @JsonProperty("status")
   public StatusEnum getStatus() {
     return status;
   }
+
   public void setStatus(StatusEnum status) {
     this.status = status;
-  }
-
-  /**
+  }/**
    * compact form of last JWT token
    **/
   public AccountInfoDTO token(String token) {
@@ -115,15 +119,17 @@ public enum StatusEnum {
   }
 
   
+
+  
   @ApiModelProperty(value = "compact form of last JWT token")
   @JsonProperty("token")
   public String getToken() {
     return token;
   }
+
   public void setToken(String token) {
     this.token = token;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -168,5 +174,7 @@ public enum StatusEnum {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+
 }
 

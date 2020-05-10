@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-11T00:03:29.380+02:00[Europe/Prague]")
 public class TokensDTO   {
   
   private @Valid String authentication;
@@ -27,16 +28,17 @@ public class TokensDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "newly generated authentication token")
   @JsonProperty("authentication")
   public String getAuthentication() {
     return authentication;
   }
+
   public void setAuthentication(String authentication) {
     this.authentication = authentication;
-  }
-
-  /**
+  }/**
    * newly generated email validation token
    **/
   public TokensDTO emailValidation(String emailValidation) {
@@ -45,15 +47,17 @@ public class TokensDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "newly generated email validation token")
   @JsonProperty("emailValidation")
   public String getEmailValidation() {
     return emailValidation;
   }
+
   public void setEmailValidation(String emailValidation) {
     this.emailValidation = emailValidation;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -94,5 +98,7 @@ public class TokensDTO   {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+
 }
 

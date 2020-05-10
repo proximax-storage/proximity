@@ -13,6 +13,8 @@ tags:
     description: Remote access to drive disk.
   - name: Account
     description: Account operations
+security:
+  - bearerTokenAuth: []
 paths:
 
 #####################
@@ -322,6 +324,13 @@ paths:
           
 components:
 
+### SECURITY SCHEMES
+  securitySchemes:
+    bearerTokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      
 ### RESPONSES
   responses:
     errorResp:

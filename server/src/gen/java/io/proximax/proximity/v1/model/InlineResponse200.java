@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-11T00:03:29.380+02:00[Europe/Prague]")
 public class InlineResponse200   {
   
   private @Valid String cid;
@@ -26,15 +27,17 @@ public class InlineResponse200   {
   }
 
   
+
+  
   @ApiModelProperty(value = "[Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. ")
   @JsonProperty("cid")
   public String getCid() {
     return cid;
   }
+
   public void setCid(String cid) {
     this.cid = cid;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -73,5 +76,7 @@ public class InlineResponse200   {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+
 }
 

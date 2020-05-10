@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-11T00:03:29.380+02:00[Europe/Prague]")
 public class ErrorDTO   {
   
   private @Valid String message;
@@ -94,16 +95,17 @@ public enum TypeEnum {
   }
 
   
+
+  
   @ApiModelProperty(value = "Error message")
   @JsonProperty("message")
   public String getMessage() {
     return message;
   }
+
   public void setMessage(String message) {
     this.message = message;
-  }
-
-  /**
+  }/**
    * * 0 - Normal - is a normal error. The command failed for some reason that&#39;s not a bug. * 1 - Client - means the client made an invalid request. * 2 - Implementation - means there&#39;s a bug in the implementation. * 3 - RateLimited - is returned when the operation has been rate-limited. * 4 - Forbidden - is returned when the client doesn&#39;t have permission to       perform the requested operation. 
    **/
   public ErrorDTO code(CodeEnum code) {
@@ -112,16 +114,17 @@ public enum TypeEnum {
   }
 
   
+
+  
   @ApiModelProperty(value = "* 0 - Normal - is a normal error. The command failed for some reason that's not a bug. * 1 - Client - means the client made an invalid request. * 2 - Implementation - means there's a bug in the implementation. * 3 - RateLimited - is returned when the operation has been rate-limited. * 4 - Forbidden - is returned when the client doesn't have permission to       perform the requested operation. ")
   @JsonProperty("code")
   public CodeEnum getCode() {
     return code;
   }
+
   public void setCode(CodeEnum code) {
     this.code = code;
-  }
-
-  /**
+  }/**
    **/
   public ErrorDTO type(TypeEnum type) {
     this.type = type;
@@ -129,15 +132,17 @@ public enum TypeEnum {
   }
 
   
+
+  
   @ApiModelProperty(value = "")
   @JsonProperty("type")
   public TypeEnum getType() {
     return type;
   }
+
   public void setType(TypeEnum type) {
     this.type = type;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -180,5 +185,7 @@ public enum TypeEnum {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+
 }
 

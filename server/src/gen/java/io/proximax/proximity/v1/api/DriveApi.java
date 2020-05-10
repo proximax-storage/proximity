@@ -18,13 +18,15 @@ import javax.validation.Valid;
 
 @Path("/drive")
 @Api(description = "the drive API")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-10T23:36:39.076+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-11T00:03:29.380+02:00[Europe/Prague]")
 public class DriveApi {
 
     @GET
     @Path("/dashboard")
     @Produces({ "application/json" })
-    @ApiOperation(value = "dashboard information", notes = "retrieve statistics for the account", response = DashboardDTO.class, tags={ "Drive",  })
+    @ApiOperation(value = "dashboard information", notes = "retrieve statistics for the account", response = DashboardDTO.class, authorizations = {
+        @Authorization(value = "bearerTokenAuth")
+    }, tags={ "Drive",  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = DashboardDTO.class)
     })
@@ -36,7 +38,9 @@ public class DriveApi {
     @Path("/add")
     @Consumes({ "multipart/form-data" })
     @Produces({ "application/json" })
-    @ApiOperation(value = "Add file", notes = "Sends file or directory to remote node which adds it to the path of the contract ", response = InlineResponse200.class, tags={ "Drive",  })
+    @ApiOperation(value = "Add file", notes = "Sends file or directory to remote node which adds it to the path of the contract ", response = InlineResponse200.class, authorizations = {
+        @Authorization(value = "bearerTokenAuth")
+    }, tags={ "Drive",  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = InlineResponse200.class),
         @ApiResponse(code = 400, message = "Bad Request", response = ErrorDTO.class)
@@ -48,7 +52,9 @@ public class DriveApi {
     @POST
     @Path("/cp")
     @Produces({ "application/json" })
-    @ApiOperation(value = "Copy file", notes = "Copy copies file or directory from the givens source path to the given destination path It does not makes the full copy of the file or directory, it just copies the reference ", response = Void.class, tags={ "Drive",  })
+    @ApiOperation(value = "Copy file", notes = "Copy copies file or directory from the givens source path to the given destination path It does not makes the full copy of the file or directory, it just copies the reference ", response = Void.class, authorizations = {
+        @Authorization(value = "bearerTokenAuth")
+    }, tags={ "Drive",  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = Void.class),
         @ApiResponse(code = 400, message = "Bad Request", response = ErrorDTO.class)
@@ -60,7 +66,9 @@ public class DriveApi {
     @POST
     @Path("/flush")
     @Produces({ "application/json" })
-    @ApiOperation(value = "Flush drive", notes = "Flush pushes state of the local Drive to all replicators", response = Void.class, tags={ "Drive",  })
+    @ApiOperation(value = "Flush drive", notes = "Flush pushes state of the local Drive to all replicators", response = Void.class, authorizations = {
+        @Authorization(value = "bearerTokenAuth")
+    }, tags={ "Drive",  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = Void.class),
         @ApiResponse(code = 400, message = "Bad Request", response = ErrorDTO.class)
@@ -72,7 +80,9 @@ public class DriveApi {
     @POST
     @Path("/get")
     @Produces({ "text/plain", "application/json" })
-    @ApiOperation(value = "Get file", notes = "Sends file or directory to remote node which adds it to the path of the contract ", response = String.class, tags={ "Drive",  })
+    @ApiOperation(value = "Get file", notes = "Sends file or directory to remote node which adds it to the path of the contract ", response = String.class, authorizations = {
+        @Authorization(value = "bearerTokenAuth")
+    }, tags={ "Drive",  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = String.class),
         @ApiResponse(code = 400, message = "Bad Request", response = ErrorDTO.class)
@@ -84,7 +94,9 @@ public class DriveApi {
     @POST
     @Path("/ls")
     @Produces({ "application/json" })
-    @ApiOperation(value = "List files", notes = "Ls returns information about the files and directories under the given path", response = StatDTO.class, responseContainer = "List", tags={ "Drive",  })
+    @ApiOperation(value = "List files", notes = "Ls returns information about the files and directories under the given path", response = StatDTO.class, responseContainer = "List", authorizations = {
+        @Authorization(value = "bearerTokenAuth")
+    }, tags={ "Drive",  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = StatDTO.class, responseContainer = "List"),
         @ApiResponse(code = 400, message = "Bad Request", response = ErrorDTO.class)
@@ -96,7 +108,9 @@ public class DriveApi {
     @POST
     @Path("/mkdir")
     @Produces({ "application/json" })
-    @ApiOperation(value = "Make directory", notes = "MakeDir creates new directory on the given path", response = Void.class, tags={ "Drive",  })
+    @ApiOperation(value = "Make directory", notes = "MakeDir creates new directory on the given path", response = Void.class, authorizations = {
+        @Authorization(value = "bearerTokenAuth")
+    }, tags={ "Drive",  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = Void.class),
         @ApiResponse(code = 400, message = "Bad Request", response = ErrorDTO.class)
@@ -108,7 +122,9 @@ public class DriveApi {
     @POST
     @Path("/mv")
     @Produces({ "application/json" })
-    @ApiOperation(value = "Move file", notes = "Move moves file or directory from the givens source path to the given destination path Use also to rename file or directory ", response = Void.class, tags={ "Drive",  })
+    @ApiOperation(value = "Move file", notes = "Move moves file or directory from the givens source path to the given destination path Use also to rename file or directory ", response = Void.class, authorizations = {
+        @Authorization(value = "bearerTokenAuth")
+    }, tags={ "Drive",  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = Void.class),
         @ApiResponse(code = 400, message = "Bad Request", response = ErrorDTO.class)
@@ -120,7 +136,9 @@ public class DriveApi {
     @POST
     @Path("/rm")
     @Produces({ "application/json" })
-    @ApiOperation(value = "Remove file", notes = "Remove removes the file or directory from the path", response = Void.class, tags={ "Drive",  })
+    @ApiOperation(value = "Remove file", notes = "Remove removes the file or directory from the path", response = Void.class, authorizations = {
+        @Authorization(value = "bearerTokenAuth")
+    }, tags={ "Drive",  })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = Void.class),
         @ApiResponse(code = 400, message = "Bad Request", response = ErrorDTO.class)
@@ -132,7 +150,9 @@ public class DriveApi {
     @POST
     @Path("/stat")
     @Produces({ "application/json" })
-    @ApiOperation(value = "File information", notes = "Stat returns information about the file or directory under the given path", response = StatDTO.class, tags={ "Drive" })
+    @ApiOperation(value = "File information", notes = "Stat returns information about the file or directory under the given path", response = StatDTO.class, authorizations = {
+        @Authorization(value = "bearerTokenAuth")
+    }, tags={ "Drive" })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Success", response = StatDTO.class),
         @ApiResponse(code = 400, message = "Bad Request", response = ErrorDTO.class)

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-11T00:03:29.380+02:00[Europe/Prague]")
 public class DashboardDTO   {
   
   private @Valid String hello;
@@ -26,15 +27,17 @@ public class DashboardDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "hello world implementation")
   @JsonProperty("hello")
   public String getHello() {
     return hello;
   }
+
   public void setHello(String hello) {
     this.hello = hello;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -73,5 +76,7 @@ public class DashboardDTO   {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+
 }
 

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-11T00:03:29.380+02:00[Europe/Prague]")
 public class AccountRequestDTO   {
   
   private @Valid String email;
@@ -27,16 +28,17 @@ public class AccountRequestDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "e-mail address for account verification")
   @JsonProperty("email")
   public String getEmail() {
     return email;
   }
+
   public void setEmail(String email) {
     this.email = email;
-  }
-
-  /**
+  }/**
    * account pasword
    **/
   public AccountRequestDTO password(String password) {
@@ -45,15 +47,17 @@ public class AccountRequestDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "account pasword")
   @JsonProperty("password")
   public String getPassword() {
     return password;
   }
+
   public void setPassword(String password) {
     this.password = password;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -94,5 +98,7 @@ public class AccountRequestDTO   {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+
 }
 

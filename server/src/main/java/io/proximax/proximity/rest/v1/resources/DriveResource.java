@@ -16,6 +16,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,7 @@ import io.proximax.dfms.cid.multibase.Multibase;
 import io.proximax.dfms.http.dtos.CidDTO;
 import io.proximax.dfms.model.drive.DriveContent;
 import io.proximax.dfms.model.drive.content.RawInputStreamContent;
+import io.proximax.proximity.security.ProximityPermissions;
 import io.proximax.proximity.v1.api.DriveApi;
 import io.proximax.proximity.v1.model.DashboardDTO;
 
@@ -50,15 +53,30 @@ public class DriveResource extends DriveApi {
       // bean constructor
    }  
 
+   protected static Cid getAuthorizedContract(String operation, String cid) {
+      Cid contract = Cid.decode(cid);
+      if (SecurityUtils.getSubject().isPermitted(ProximityPermissions.drivePermission(contract, operation))) {
+         return contract;
+      } else {
+         throw new AuthorizationException("Unauthorized access to " + cid);
+      }
+   }
+   
    @RequiresAuthentication
    @Override
    public Response driveAdd(@NotNull String dst, String cid, Boolean flush) {
+      // authorize access
+      Cid contract = getAuthorizedContract("add", cid);
+      // retrieve the drive
+      DriveRepository drive = api.createDriveRepository();
       try {
+         // prepare to forward the call
          String contentType = httpRequest.getContentType();
          InputStream body = httpRequest.getInputStream();
          DriveContent content = new RawInputStreamContent(Optional.empty(), body, contentType);
-         DriveRepository drive = api.createDriveRepository();
-         Cid resp = drive.add(Cid.decode(cid), dst, content).blockingFirst();
+         // forward the call
+         Cid resp = drive.add(contract, dst, content).blockingFirst();
+         // return cid as response
          CidDTO cidDto = new CidDTO(resp.encode(Multibase.BASE_58_BTC));
          return Response.ok(cidDto).build();
       } catch (IOException e) {

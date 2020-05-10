@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-11T00:03:29.380+02:00[Europe/Prague]")
 public class ContractDTO   {
   
   private @Valid String drive;
@@ -38,16 +39,17 @@ public class ContractDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "[Cid](https://github.com/multiformats/cid) (version 1) - special content identifier. ")
   @JsonProperty("drive")
   public String getDrive() {
     return drive;
   }
+
   public void setDrive(String drive) {
     this.drive = drive;
-  }
-
-  /**
+  }/**
    * Hex encoded public key.
    **/
   public ContractDTO owner(String owner) {
@@ -56,16 +58,17 @@ public class ContractDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "Hex encoded public key.")
   @JsonProperty("owner")
   public String getOwner() {
     return owner;
   }
+
   public void setOwner(String owner) {
     this.owner = owner;
-  }
-
-  /**
+  }/**
    * Hex encoded public keys.
    **/
   public ContractDTO replicators(List<String> replicators) {
@@ -74,16 +77,17 @@ public class ContractDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "Hex encoded public keys.")
   @JsonProperty("replicators")
   public List<String> getReplicators() {
     return replicators;
   }
+
   public void setReplicators(List<String> replicators) {
     this.replicators = replicators;
-  }
-
-  /**
+  }/**
    **/
   public ContractDTO root(String root) {
     this.root = root;
@@ -91,16 +95,17 @@ public class ContractDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "")
   @JsonProperty("root")
   public String getRoot() {
     return root;
   }
+
   public void setRoot(String root) {
     this.root = root;
-  }
-
-  /**
+  }/**
    * Block height when the Contract was started.
    **/
   public ContractDTO created(Long created) {
@@ -109,16 +114,17 @@ public class ContractDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "Block height when the Contract was started.")
   @JsonProperty("created")
   public Long getCreated() {
     return created;
   }
+
   public void setCreated(Long created) {
     this.created = created;
-  }
-
-  /**
+  }/**
    **/
   public ContractDTO duration(Long duration) {
     this.duration = duration;
@@ -126,16 +132,17 @@ public class ContractDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "")
   @JsonProperty("duration")
   public Long getDuration() {
     return duration;
   }
+
   public void setDuration(Long duration) {
     this.duration = duration;
-  }
-
-  /**
+  }/**
    **/
   public ContractDTO space(Long space) {
     this.space = space;
@@ -143,16 +150,17 @@ public class ContractDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "")
   @JsonProperty("space")
   public Long getSpace() {
     return space;
   }
+
   public void setSpace(Long space) {
     this.space = space;
-  }
-
-  /**
+  }/**
    **/
   public ContractDTO replicas(Integer replicas) {
     this.replicas = replicas;
@@ -160,16 +168,17 @@ public class ContractDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "")
   @JsonProperty("replicas")
   public Integer getReplicas() {
     return replicas;
   }
+
   public void setReplicas(Integer replicas) {
     this.replicas = replicas;
-  }
-
-  /**
+  }/**
    **/
   public ContractDTO percentApprovers(Integer percentApprovers) {
     this.percentApprovers = percentApprovers;
@@ -177,16 +186,17 @@ public class ContractDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "")
   @JsonProperty("percentApprovers")
   public Integer getPercentApprovers() {
     return percentApprovers;
   }
+
   public void setPercentApprovers(Integer percentApprovers) {
     this.percentApprovers = percentApprovers;
-  }
-
-  /**
+  }/**
    **/
   public ContractDTO billingPrice(Long billingPrice) {
     this.billingPrice = billingPrice;
@@ -194,16 +204,17 @@ public class ContractDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "")
   @JsonProperty("billingPrice")
   public Long getBillingPrice() {
     return billingPrice;
   }
+
   public void setBillingPrice(Long billingPrice) {
     this.billingPrice = billingPrice;
-  }
-
-  /**
+  }/**
    **/
   public ContractDTO billingPeriod(Integer billingPeriod) {
     this.billingPeriod = billingPeriod;
@@ -211,15 +222,17 @@ public class ContractDTO   {
   }
 
   
+
+  
   @ApiModelProperty(value = "")
   @JsonProperty("billingPeriod")
   public Integer getBillingPeriod() {
     return billingPeriod;
   }
+
   public void setBillingPeriod(Integer billingPeriod) {
     this.billingPeriod = billingPeriod;
   }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -278,5 +291,7 @@ public class ContractDTO   {
     }
     return o.toString().replace("\n", "\n    ");
   }
+
+
 }
 
