@@ -31,6 +31,7 @@ import okhttp3.HttpUrl;
 import okhttp3.HttpUrl.Builder;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * @author tono
@@ -40,7 +41,7 @@ class AddFileTest {
 
    private static final String NAME = "/proximity-test-" + System.nanoTime();
    private static final Cid CID = Cid.decode("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
-
+//                                    drive:*:baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu
    @Test
    void testAddFile() throws IOException {
       TestRepo repo = new TestRepo();
@@ -51,7 +52,8 @@ class AddFileTest {
       StorageApi api = new StorageApi(new URL("http://localhost:6366"));
       DriveRepository drive = api.createDriveRepository();
       List<DriveItem> items = drive.ls(CID, NAME).blockingFirst();
-      assertEquals(2, items.size());
+      assertEquals(1, items.size());
+      assertEquals("database.sql", items.get(0).getName());
    }
 
    /**
@@ -67,16 +69,22 @@ class AddFileTest {
       
       public Observable<Cid> add(Cid id, String path, DriveContent content) throws IOException {
          HttpUrl url = buildUrl("drive/add", id, path).build();
-         String authHeader = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhdXRoZW50aWNhdGlvbiIsInN1YiI6InRvbm82QGxhbGEuaW8iLCJleHAiOjE1ODg5NzgzNDZ9.cG5NJ7Uo2UOB6rUvM-9dCiDX9km98welxXM-Ncxw8bI";
+         String jwToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhdXRoZW50aWNhdGlvbiIsInN1YiI6InRvbm84QGxhbGEuaW8iLCJleHAiOjE1ODkzMDA5NTd9.6M0R3Zd6FjET5KVOyAbHS9FpjNyXvnFzWaFfoPUnDao";
+         String authHeader = "Bearer " + jwToken;
          Request request = new Request.Builder().url(url).header("Authorization", authHeader).post(new MultipartRequestContent(content, MultipartRequestContent.createBoundary())).build();
 
          // make the request
-         return makeRequest(request).map(this::mapStringOrError).map(TestRepo::log).map(str -> getGson().fromJson(str, CidDTO2.class))
+         return makeRequest(request).map(TestRepo::log).map(this::mapStringOrError).map(TestRepo::log).map(str -> getGson().fromJson(str, CidDTO2.class))
                .map(CidDTO2::getId).map(Cid::decode);
       }
 
       private static String log(String message) {
          System.out.println("MAPPING -->> " + message);
+         return message;
+      }
+      
+      private static Response log(Response message) {
+         System.out.println("RESP -->> " + message);
          return message;
       }
       
@@ -123,7 +131,7 @@ class AddFileTest {
       @Override
       public URL getUrl() {
          try {
-            return new URL("http://localhost:8080/proximity");
+            return new URL("http://localhost:8080/server");
          } catch (MalformedURLException e) {
             throw new RuntimeException();
          }

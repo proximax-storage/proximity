@@ -9,7 +9,11 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authz.Permission;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.proximax.dfms.DriveRepository;
 import io.proximax.dfms.cid.Cid;
@@ -23,6 +27,8 @@ import io.reactivex.Observable;
  * Provide authenticated drive API. This means calls are authorized and default contract can be used
  */
 public class AuthenticatedDrive {
+   private static final Logger logger = LoggerFactory.getLogger(AuthenticatedDrive.class);
+
    private static final String KEY_DEFAULT_CONTRACT = "io.proximax.proximity.defaultContract";
    private final DriveRepository drive;
    
@@ -36,8 +42,10 @@ public class AuthenticatedDrive {
    protected <T> T authorizeCall(Cid actualContract, String permission, Supplier<T> supplier) {
       // verify permissions
       Subject currentUser = SecurityUtils.getSubject();
-      if (!currentUser.isPermitted(ProximityPermissions.drivePermission(actualContract, permission))) {
-         throw new IllegalStateException("Unauthorized access");
+      Permission perm = ProximityPermissions.drivePermission(actualContract, permission);
+      logger.info("Checking {} for {}", currentUser, perm);
+      if (!currentUser.isPermitted(perm)) {
+         throw new AuthenticationException("Unauthorized access");
       } else {
          return supplier.get();
       }

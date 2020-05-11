@@ -21,6 +21,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import io.proximax.proximity.exception.ProximityExceptionMapper;
 import io.proximax.proximity.rest.v1.resources.AccountResource;
 import io.proximax.proximity.rest.v1.resources.DriveResource;
+import io.proximax.proximity.util.AuthenticatedDriveFactory;
 import io.proximax.proximity.util.StorageApiFactory;
 
 /**
@@ -35,7 +36,7 @@ public class ProximityApp extends Application {
       Set<Class<?>> classes = new HashSet<>();
       // add mapper for proximity exceptions
       classes.add(ProximityExceptionMapper.class);
-      // add shiro feature
+      // add shiro security
       classes.add(SubjectPrincipalRequestFilter.class);
       classes.add(ShiroAnnotationFilterFeature.class);
       // add resources
@@ -48,8 +49,9 @@ public class ProximityApp extends Application {
    @Override
    public Set<Object> getSingletons() {
       Set<Object> singletons = new HashSet<>();
-      // add binder for Hibernate SessionFactory so it can be injected to resources
+      // add app specific singleton binders
       singletons.add(new StorageApiFactory.Binder());
+      singletons.add(new AuthenticatedDriveFactory.Binder());
       return singletons;
    }
 

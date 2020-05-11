@@ -16,20 +16,16 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.proximax.dfms.DriveRepository;
-import io.proximax.dfms.StorageApi;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.cid.multibase.Multibase;
 import io.proximax.dfms.http.dtos.CidDTO;
 import io.proximax.dfms.model.drive.DriveContent;
 import io.proximax.dfms.model.drive.content.RawInputStreamContent;
-import io.proximax.proximity.security.ProximityPermissions;
+import io.proximax.proximity.drive.AuthenticatedDrive;
 import io.proximax.proximity.v1.api.DriveApi;
 import io.proximax.proximity.v1.model.DashboardDTO;
 
@@ -44,7 +40,7 @@ public class DriveResource extends DriveApi {
    @Context
    private HttpServletRequest httpRequest;
    @Inject
-   private StorageApi api;
+   private AuthenticatedDrive drive;
    
    /**
     * 
@@ -52,23 +48,12 @@ public class DriveResource extends DriveApi {
    public DriveResource() {
       // bean constructor
    }  
-
-   protected static Cid getAuthorizedContract(String operation, String cid) {
-      Cid contract = Cid.decode(cid);
-      if (SecurityUtils.getSubject().isPermitted(ProximityPermissions.drivePermission(contract, operation))) {
-         return contract;
-      } else {
-         throw new AuthorizationException("Unauthorized access to " + cid);
-      }
-   }
    
    @RequiresAuthentication
    @Override
    public Response driveAdd(@NotNull String dst, String cid, Boolean flush) {
-      // authorize access
-      Cid contract = getAuthorizedContract("add", cid);
-      // retrieve the drive
-      DriveRepository drive = api.createDriveRepository();
+      logger.info("Adding content to {}:{}", cid, dst);
+      Optional<Cid> contract = Optional.ofNullable(cid==null?null:Cid.decode(cid));
       try {
          // prepare to forward the call
          String contentType = httpRequest.getContentType();
