@@ -13,13 +13,6 @@ public class JWTToken extends BearerToken {
 
    /**
     * @param token
-    */
-   public JWTToken(String token) {
-      super(token);
-   }
-
-   /**
-    * @param token
     * @param host
     */
    public JWTToken(String token, String host) {

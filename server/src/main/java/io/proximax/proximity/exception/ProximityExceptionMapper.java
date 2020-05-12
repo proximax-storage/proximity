@@ -15,6 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.jsonwebtoken.JwtException;
+import io.proximax.proximity.v1.model.ErrorDTO;
+import io.proximax.proximity.v1.model.ErrorDTO.CodeEnum;
+import io.proximax.proximity.v1.model.ErrorDTO.TypeEnum;
 
 /**
  * @author tono
@@ -24,6 +27,7 @@ import io.jsonwebtoken.JwtException;
 public class ProximityExceptionMapper implements ExceptionMapper<Throwable> {
    private static final Logger logger = LoggerFactory.getLogger(ProximityExceptionMapper.class);
 
+   private static final String INTERNAL_SERVER_ERROR = "Internal server error";
    /**
     * bean constructor
     */
@@ -44,7 +48,7 @@ public class ProximityExceptionMapper implements ExceptionMapper<Throwable> {
          return handle((JwtException) e);
       } else {
          // handle any other exception
-         return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+         return Response.status(Status.INTERNAL_SERVER_ERROR).entity(createErrorDTO(ErrorType.INTERNAL, INTERNAL_SERVER_ERROR)).build();
       }
    }
 
@@ -59,20 +63,23 @@ public class ProximityExceptionMapper implements ExceptionMapper<Throwable> {
       if (resp != null) {
          return resp;
       } else {
-         return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+         return Response.status(Status.INTERNAL_SERVER_ERROR).entity(createErrorDTO(ErrorType.INTERNAL, INTERNAL_SERVER_ERROR)).build();
       }
    }
 
    private static Response handle(ProximityException e) {
-      Response.Status status = null;
+      Response.Status status;
+      ErrorDTO error;
       switch (e.getType()) {
       case BAD_REQUEST:
          status = Status.BAD_REQUEST;
+         error = createErrorDTO(ErrorType.CLIENT, e.getMessage());
          break;
       default:
          status = Status.INTERNAL_SERVER_ERROR;
+         error = createErrorDTO(ErrorType.INTERNAL, INTERNAL_SERVER_ERROR);
       }
-      return Response.status(status).build();
+      return Response.status(status).entity(error).build();
    }
 
    public Response handle(AuthorizationException exception) {
@@ -82,10 +89,18 @@ public class ProximityExceptionMapper implements ExceptionMapper<Throwable> {
       } else {
          status = Status.UNAUTHORIZED;
       }
-      return Response.status(status).build();
+      return Response.status(status).entity(createErrorDTO(ErrorType.FORBIDDEN, "Not authorized")).build();
    }
    
    private Response handle(JwtException e) {
-      return Response.status(Status.BAD_REQUEST).build();
+      return Response.status(Status.BAD_REQUEST).entity(createErrorDTO(ErrorType.INTERNAL, INTERNAL_SERVER_ERROR)).build();
+   }
+   
+   private static ErrorDTO createErrorDTO(ErrorType type, String message) {
+      ErrorDTO err = new ErrorDTO();
+      err.setType(TypeEnum.ERROR);
+      err.setCode(CodeEnum.fromValue(type.getCode()));
+      err.setMessage(message);
+      return err;
    }
 }

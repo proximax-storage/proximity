@@ -958,8 +958,8 @@ ul.nav-tabs {
     },
     "code" : {
       "type" : "integer",
-      "description" : "* 0 - Normal - is a normal error. The command failed for some reason that's not a bug.\n* 1 - Client - means the client made an invalid request.\n* 2 - Implementation - means there's a bug in the implementation.\n* 3 - RateLimited - is returned when the operation has been rate-limited.\n* 4 - Forbidden - is returned when the client doesn't have permission to\n      perform the requested operation.\n",
-      "enum" : [ 0, 1, 2 ]
+      "description" : "* 0 - Generic - is generic error\n* 1 - Client - means the client made an invalid request.\n* 2 - Internal - means there's a bug in the implementation.\n* 3 - RateLimited - is returned when the operation has been rate-limited.\n* 4 - Forbidden - is returned when the client doesn't have permission to perform the requested operation.\n",
+      "enum" : [ 0, 1, 2, 3, 4 ]
     },
     "type" : {
       "type" : "string",

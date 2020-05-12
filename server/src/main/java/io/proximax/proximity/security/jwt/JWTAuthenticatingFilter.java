@@ -3,24 +3,30 @@
  */
 package io.proximax.proximity.security.jwt;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
+import org.apache.shiro.web.filter.authc.BearerHttpAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.proximax.proximity.v1.model.ErrorDTO;
+import io.proximax.proximity.v1.model.ErrorDTO.CodeEnum;
+import io.proximax.proximity.v1.model.ErrorDTO.TypeEnum;
+
 /**
  * Authentication filter that extracts JWT token from request header and passes that to authorization
  */
-public class JWTAuthenticatingFilter extends AuthenticatingFilter {
+public class JWTAuthenticatingFilter extends BearerHttpAuthenticationFilter {
    private static final Logger logger = LoggerFactory.getLogger(JWTAuthenticatingFilter.class);
-
-   private static final String AUTHORIZATION_HEADER = "Authorization";
-   private static final String AUTHORIZATION_BEARER = "Bearer ";
 
    /**
     * bean constructor
@@ -30,33 +36,32 @@ public class JWTAuthenticatingFilter extends AuthenticatingFilter {
    }
 
    @Override
-   protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) throws Exception {
-      // create JWT token from the request header
-      String authHeader = getAuthHeader(request);
-      String token = authHeader.substring(AUTHORIZATION_BEARER.length());
-      return new JWTToken(token);
+   protected AuthenticationToken createBearerToken(String token, ServletRequest request) {
+      return new JWTToken(token, request.getRemoteHost());
    }
 
    @Override
-   protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-      String authHeader = getAuthHeader(request);
-      // if we have valid token then execute login
-      if (authHeader != null && authHeader.startsWith(AUTHORIZATION_BEARER)) {
-         logger.info("Authenticating using token in request header");
-         return executeLogin(request, response);
+   protected boolean sendChallenge(ServletRequest request, ServletResponse response) {
+      // prepare the response in parent implementation
+      super.sendChallenge(request, response);
+      // prepare content body
+      ErrorDTO err = new ErrorDTO();
+      err.setType(TypeEnum.ERROR);
+      err.setCode(CodeEnum.NUMBER_4);
+      err.setMessage("Not authorized");
+      // prepare for serialization
+      ObjectMapper objectMapper = new ObjectMapper();
+      // add error to the response body
+      HttpServletResponse httpResponse = WebUtils.toHttp(response);
+      try {
+         PrintWriter writer = httpResponse.getWriter();
+         objectMapper.writeValue(writer, err);
+         writer.flush();
+      } catch (IOException e) {
+         logger.error("failed to serialize error", e);
       }
-      // was unable to handle the request so leave it for the filter chain
-      return true;
+      return false;
    }
-
-   /**
-    * get Authorization field from the request header
-    * 
-    * @param request
-    * @return the Authorization header value as string or null if such value is not present
-    */
-   private String getAuthHeader(ServletRequest request) {
-      HttpServletRequest httpRequest = WebUtils.toHttp(request);
-      return httpRequest.getHeader(AUTHORIZATION_HEADER);
-   }
+   
+   
 }
