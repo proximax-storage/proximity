@@ -18,7 +18,7 @@ import io.proximax.proximity.client.invoker.Pair;
 import java.util.Map;
 import java.util.List;
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-11T00:03:28.331+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-13T22:46:23.640+02:00[Europe/Prague]")
 public class ApiKeyAuth implements Authentication {
   private final String location;
   private final String paramName;

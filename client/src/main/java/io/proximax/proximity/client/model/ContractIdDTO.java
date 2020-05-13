@@ -25,62 +25,62 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * AccountRequestDTO
+ * ContractIdDTO
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-13T22:46:23.640+02:00[Europe/Prague]")
-public class AccountRequestDTO {
-  public static final String SERIALIZED_NAME_EMAIL = "email";
-  @SerializedName(SERIALIZED_NAME_EMAIL)
-  private String email;
+public class ContractIdDTO {
+  public static final String SERIALIZED_NAME_ID = "id";
+  @SerializedName(SERIALIZED_NAME_ID)
+  private Long id;
 
-  public static final String SERIALIZED_NAME_PASSWORD = "password";
-  @SerializedName(SERIALIZED_NAME_PASSWORD)
-  private String password;
+  public static final String SERIALIZED_NAME_CID = "cid";
+  @SerializedName(SERIALIZED_NAME_CID)
+  private String cid;
 
 
-  public AccountRequestDTO email(String email) {
+  public ContractIdDTO id(Long id) {
     
-    this.email = email;
+    this.id = id;
     return this;
   }
 
    /**
-   * e-mail address for account verification
-   * @return email
+   * unique id of the contract
+   * @return id
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "e-mail address for account verification")
+  @ApiModelProperty(value = "unique id of the contract")
 
-  public String getEmail() {
-    return email;
+  public Long getId() {
+    return id;
   }
 
 
-  public void setEmail(String email) {
-    this.email = email;
+  public void setId(Long id) {
+    this.id = id;
   }
 
 
-  public AccountRequestDTO password(String password) {
+  public ContractIdDTO cid(String cid) {
     
-    this.password = password;
+    this.cid = cid;
     return this;
   }
 
    /**
-   * account pasword
-   * @return password
+   * CID of the contract
+   * @return cid
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "account pasword")
+  @ApiModelProperty(value = "CID of the contract")
 
-  public String getPassword() {
-    return password;
+  public String getCid() {
+    return cid;
   }
 
 
-  public void setPassword(String password) {
-    this.password = password;
+  public void setCid(String cid) {
+    this.cid = cid;
   }
 
 
@@ -92,23 +92,23 @@ public class AccountRequestDTO {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AccountRequestDTO accountRequestDTO = (AccountRequestDTO) o;
-    return Objects.equals(this.email, accountRequestDTO.email) &&
-        Objects.equals(this.password, accountRequestDTO.password);
+    ContractIdDTO contractIdDTO = (ContractIdDTO) o;
+    return Objects.equals(this.id, contractIdDTO.id) &&
+        Objects.equals(this.cid, contractIdDTO.cid);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, password);
+    return Objects.hash(id, cid);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AccountRequestDTO {\n");
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
-    sb.append("    password: ").append(toIndentedString(password)).append("\n");
+    sb.append("class ContractIdDTO {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    cid: ").append(toIndentedString(cid)).append("\n");
     sb.append("}");
     return sb.toString();
   }

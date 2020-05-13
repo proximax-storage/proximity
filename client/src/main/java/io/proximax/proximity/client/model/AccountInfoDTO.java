@@ -20,14 +20,17 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import io.proximax.proximity.client.model.ContractIdDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * AccountInfoDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-11T00:03:28.331+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-13T22:46:23.640+02:00[Europe/Prague]")
 public class AccountInfoDTO {
   public static final String SERIALIZED_NAME_ID = "id";
   @SerializedName(SERIALIZED_NAME_ID)
@@ -38,12 +41,69 @@ public class AccountInfoDTO {
   private String email;
 
   /**
+   * Gets or Sets emailValidation
+   */
+  @JsonAdapter(EmailValidationEnum.Adapter.class)
+  public enum EmailValidationEnum {
+    VALIDATED("validated"),
+    
+    NOT_VALIDATED("not_validated");
+
+    private String value;
+
+    EmailValidationEnum(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    public static EmailValidationEnum fromValue(String value) {
+      for (EmailValidationEnum b : EmailValidationEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+
+    public static class Adapter extends TypeAdapter<EmailValidationEnum> {
+      @Override
+      public void write(final JsonWriter jsonWriter, final EmailValidationEnum enumeration) throws IOException {
+        jsonWriter.value(enumeration.getValue());
+      }
+
+      @Override
+      public EmailValidationEnum read(final JsonReader jsonReader) throws IOException {
+        String value =  jsonReader.nextString();
+        return EmailValidationEnum.fromValue(value);
+      }
+    }
+  }
+
+  public static final String SERIALIZED_NAME_EMAIL_VALIDATION = "emailValidation";
+  @SerializedName(SERIALIZED_NAME_EMAIL_VALIDATION)
+  private EmailValidationEnum emailValidation;
+
+  public static final String SERIALIZED_NAME_PASSWORD_HASH = "passwordHash";
+  @SerializedName(SERIALIZED_NAME_PASSWORD_HASH)
+  private String passwordHash;
+
+  public static final String SERIALIZED_NAME_TOKEN = "token";
+  @SerializedName(SERIALIZED_NAME_TOKEN)
+  private String token;
+
+  /**
    * Gets or Sets status
    */
   @JsonAdapter(StatusEnum.Adapter.class)
   public enum StatusEnum {
-    NEW("new"),
-    
     ACTIVE("active"),
     
     INACTIVE("inactive");
@@ -90,9 +150,9 @@ public class AccountInfoDTO {
   @SerializedName(SERIALIZED_NAME_STATUS)
   private StatusEnum status;
 
-  public static final String SERIALIZED_NAME_TOKEN = "token";
-  @SerializedName(SERIALIZED_NAME_TOKEN)
-  private String token;
+  public static final String SERIALIZED_NAME_CONTRACTS = "contracts";
+  @SerializedName(SERIALIZED_NAME_CONTRACTS)
+  private List<ContractIdDTO> contracts = null;
 
 
   public AccountInfoDTO id(Long id) {
@@ -141,26 +201,49 @@ public class AccountInfoDTO {
   }
 
 
-  public AccountInfoDTO status(StatusEnum status) {
+  public AccountInfoDTO emailValidation(EmailValidationEnum emailValidation) {
     
-    this.status = status;
+    this.emailValidation = emailValidation;
     return this;
   }
 
    /**
-   * Get status
-   * @return status
+   * Get emailValidation
+   * @return emailValidation
   **/
   @javax.annotation.Nullable
   @ApiModelProperty(value = "")
 
-  public StatusEnum getStatus() {
-    return status;
+  public EmailValidationEnum getEmailValidation() {
+    return emailValidation;
   }
 
 
-  public void setStatus(StatusEnum status) {
-    this.status = status;
+  public void setEmailValidation(EmailValidationEnum emailValidation) {
+    this.emailValidation = emailValidation;
+  }
+
+
+  public AccountInfoDTO passwordHash(String passwordHash) {
+    
+    this.passwordHash = passwordHash;
+    return this;
+  }
+
+   /**
+   * password hash for authentication
+   * @return passwordHash
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "password hash for authentication")
+
+  public String getPasswordHash() {
+    return passwordHash;
+  }
+
+
+  public void setPasswordHash(String passwordHash) {
+    this.passwordHash = passwordHash;
   }
 
 
@@ -187,6 +270,60 @@ public class AccountInfoDTO {
   }
 
 
+  public AccountInfoDTO status(StatusEnum status) {
+    
+    this.status = status;
+    return this;
+  }
+
+   /**
+   * Get status
+   * @return status
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public StatusEnum getStatus() {
+    return status;
+  }
+
+
+  public void setStatus(StatusEnum status) {
+    this.status = status;
+  }
+
+
+  public AccountInfoDTO contracts(List<ContractIdDTO> contracts) {
+    
+    this.contracts = contracts;
+    return this;
+  }
+
+  public AccountInfoDTO addContractsItem(ContractIdDTO contractsItem) {
+    if (this.contracts == null) {
+      this.contracts = new ArrayList<>();
+    }
+    this.contracts.add(contractsItem);
+    return this;
+  }
+
+   /**
+   * Get contracts
+   * @return contracts
+  **/
+  @javax.annotation.Nullable
+  @ApiModelProperty(value = "")
+
+  public List<ContractIdDTO> getContracts() {
+    return contracts;
+  }
+
+
+  public void setContracts(List<ContractIdDTO> contracts) {
+    this.contracts = contracts;
+  }
+
+
   @Override
   public boolean equals(java.lang.Object o) {
     if (this == o) {
@@ -198,13 +335,16 @@ public class AccountInfoDTO {
     AccountInfoDTO accountInfoDTO = (AccountInfoDTO) o;
     return Objects.equals(this.id, accountInfoDTO.id) &&
         Objects.equals(this.email, accountInfoDTO.email) &&
+        Objects.equals(this.emailValidation, accountInfoDTO.emailValidation) &&
+        Objects.equals(this.passwordHash, accountInfoDTO.passwordHash) &&
+        Objects.equals(this.token, accountInfoDTO.token) &&
         Objects.equals(this.status, accountInfoDTO.status) &&
-        Objects.equals(this.token, accountInfoDTO.token);
+        Objects.equals(this.contracts, accountInfoDTO.contracts);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, email, status, token);
+    return Objects.hash(id, email, emailValidation, passwordHash, token, status, contracts);
   }
 
 
@@ -214,8 +354,11 @@ public class AccountInfoDTO {
     sb.append("class AccountInfoDTO {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    emailValidation: ").append(toIndentedString(emailValidation)).append("\n");
+    sb.append("    passwordHash: ").append(toIndentedString(passwordHash)).append("\n");
     sb.append("    token: ").append(toIndentedString(token)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    contracts: ").append(toIndentedString(contracts)).append("\n");
     sb.append("}");
     return sb.toString();
   }

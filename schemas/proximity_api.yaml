@@ -465,15 +465,36 @@ components:
         email:
           type: string
           description: e-mail address for account verification
-        status:
+        emailValidation:
           type: string
           enum:
-          - "new"
-          - "active"
-          - "inactive"
+          - "validated"
+          - "not_validated"
+        passwordHash:
+          type: string
+          description: password hash for authentication
         token:
           type: string
           description: compact form of last JWT token
+        status:
+          type: string
+          enum:
+          - "active"
+          - "inactive"
+        contracts:
+          type: array
+          items:
+            $ref: '#/components/schemas/contractIdDTO'
+    contractIdDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: unique id of the contract
+        cid:
+          type: string
+          description: CID of the contract
     tokensDTO:
       type: object
       properties:

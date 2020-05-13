@@ -5,7 +5,9 @@ package io.proximax.proximity.rest.v1.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -24,10 +26,13 @@ import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.cid.multibase.Multibase;
 import io.proximax.dfms.http.dtos.CidDTO;
 import io.proximax.dfms.model.drive.DriveContent;
+import io.proximax.dfms.model.drive.DriveItem;
 import io.proximax.dfms.model.drive.content.RawInputStreamContent;
 import io.proximax.proximity.drive.AuthenticatedDrive;
 import io.proximax.proximity.v1.api.DriveApi;
 import io.proximax.proximity.v1.model.DashboardDTO;
+import io.proximax.proximity.v1.model.StatDTO;
+import io.proximax.proximity.v1.model.StatDTO.TypeEnum;
 
 /**
  * @author tono
@@ -70,52 +75,87 @@ public class DriveResource extends DriveApi {
       }
    }
    
+   @RequiresAuthentication
    @Override
    public Response driveCp(@NotNull String src, @NotNull String dst, String cid, Boolean flush) {
-      // TODO Auto-generated method stub
-      return super.driveCp(src, dst, cid, flush);
+      logger.info("Copying from {} to {}", src, dst);
+      Optional<Cid> contract = Optional.ofNullable(cid==null?null:Cid.decode(cid));
+      drive.copy(contract, src, dst).blockingAwait();
+      return Response.ok().build();
    }
 
+   @RequiresAuthentication
    @Override
    public Response driveFlush(String cid) {
-      // TODO Auto-generated method stub
-      return super.driveFlush(cid);
+      logger.info("Flushing");
+      Optional<Cid> contract = Optional.ofNullable(cid==null?null:Cid.decode(cid));
+      drive.flush(contract, "/").blockingAwait();
+      return Response.ok().build();
    }
 
+   @RequiresAuthentication
    @Override
    public Response driveGet(@NotNull String src, String cid, Boolean flush) {
       // TODO Auto-generated method stub
-      return super.driveGet(src, cid, flush);
+      throw new UnsupportedOperationException("not implemented yet");
    }
 
+   @RequiresAuthentication
    @Override
    public Response driveLs(@NotNull String src, String cid) {
-      // TODO Auto-generated method stub
-      return super.driveLs(src, cid);
+      logger.info("List for {}", src);
+      Optional<Cid> contract = Optional.ofNullable(cid==null?null:Cid.decode(cid));
+      List<DriveItem> items = drive.ls(contract, src).blockingFirst();
+      List<StatDTO> stats = items.stream().map(DriveResource::mapToStatDTO).collect(Collectors.toList());
+      return Response.ok(stats).build();
    }
 
+   protected static StatDTO mapToStatDTO(DriveItem item) {
+      StatDTO stat = new StatDTO();
+      stat.setName(item.getName());
+      stat.setSize((int)item.getSize());
+      stat.setType(TypeEnum.fromValue(item.getType().getCode()));
+      return stat;
+   }
+   
+   @RequiresAuthentication
    @Override
    public Response driveMkdir(@NotNull String src, String cid, Boolean flush) {
-      // TODO Auto-generated method stub
-      return super.driveMkdir(src, cid, flush);
+      logger.info("Mkdir {}", src);
+      Optional<Cid> contract = Optional.ofNullable(cid==null?null:Cid.decode(cid));
+      drive.makeDir(contract, src).blockingAwait();
+      return Response.ok().build();
    }
 
+   @RequiresAuthentication
    @Override
    public Response driveMv(@NotNull String src, @NotNull String dst, String cid, Boolean flush) {
-      // TODO Auto-generated method stub
-      return super.driveMv(src, dst, cid, flush);
+      logger.info("Moving from {} to {}", src, dst);
+      Optional<Cid> contract = Optional.ofNullable(cid==null?null:Cid.decode(cid));
+      drive.move(contract, src, dst).blockingAwait();
+      return Response.ok().build();
    }
 
+   @RequiresAuthentication
    @Override
    public Response driveRm(@NotNull String src, String cid, Boolean flush, Boolean local) {
-      // TODO Auto-generated method stub
-      return super.driveRm(src, cid, flush, local);
+      logger.info("Remove {}", src);
+      Optional<Cid> contract = Optional.ofNullable(cid==null?null:Cid.decode(cid));
+      drive.remove(contract, src).blockingAwait();
+      return Response.ok().build();
    }
 
+   @RequiresAuthentication
    @Override
    public Response driveStat(@NotNull String src, String cid) {
-      // TODO Auto-generated method stub
-      return super.driveStat(src, cid);
+      logger.info("Stat for {}", src);
+      Optional<Cid> contract = Optional.ofNullable(cid==null?null:Cid.decode(cid));
+      DriveItem item = drive.stat(contract, src).blockingFirst();
+      StatDTO stat = new StatDTO();
+      stat.setName(item.getName());
+      stat.setSize((int)item.getSize());
+      stat.setType(TypeEnum.fromValue(item.getType().getCode()));
+      return Response.ok(stat).build();
    }
 
    @RequiresAuthentication

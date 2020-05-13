@@ -27,14 +27,14 @@ import java.io.IOException;
 /**
  * ErrorDTO
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-11T00:03:28.331+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2020-05-13T22:46:23.640+02:00[Europe/Prague]")
 public class ErrorDTO {
   public static final String SERIALIZED_NAME_MESSAGE = "message";
   @SerializedName(SERIALIZED_NAME_MESSAGE)
   private String message;
 
   /**
-   * * 0 - Normal - is a normal error. The command failed for some reason that&#39;s not a bug. * 1 - Client - means the client made an invalid request. * 2 - Implementation - means there&#39;s a bug in the implementation. * 3 - RateLimited - is returned when the operation has been rate-limited. * 4 - Forbidden - is returned when the client doesn&#39;t have permission to       perform the requested operation. 
+   * * 0 - Generic - is generic error * 1 - Client - means the client made an invalid request. * 2 - Internal - means there&#39;s a bug in the implementation. * 3 - RateLimited - is returned when the operation has been rate-limited. * 4 - Forbidden - is returned when the client doesn&#39;t have permission to perform the requested operation. 
    */
   @JsonAdapter(CodeEnum.Adapter.class)
   public enum CodeEnum {
@@ -42,7 +42,11 @@ public class ErrorDTO {
     
     NUMBER_1(1),
     
-    NUMBER_2(2);
+    NUMBER_2(2),
+    
+    NUMBER_3(3),
+    
+    NUMBER_4(4);
 
     private Integer value;
 
@@ -166,11 +170,11 @@ public class ErrorDTO {
   }
 
    /**
-   * * 0 - Normal - is a normal error. The command failed for some reason that&#39;s not a bug. * 1 - Client - means the client made an invalid request. * 2 - Implementation - means there&#39;s a bug in the implementation. * 3 - RateLimited - is returned when the operation has been rate-limited. * 4 - Forbidden - is returned when the client doesn&#39;t have permission to       perform the requested operation. 
+   * * 0 - Generic - is generic error * 1 - Client - means the client made an invalid request. * 2 - Internal - means there&#39;s a bug in the implementation. * 3 - RateLimited - is returned when the operation has been rate-limited. * 4 - Forbidden - is returned when the client doesn&#39;t have permission to perform the requested operation. 
    * @return code
   **/
   @javax.annotation.Nullable
-  @ApiModelProperty(value = "* 0 - Normal - is a normal error. The command failed for some reason that's not a bug. * 1 - Client - means the client made an invalid request. * 2 - Implementation - means there's a bug in the implementation. * 3 - RateLimited - is returned when the operation has been rate-limited. * 4 - Forbidden - is returned when the client doesn't have permission to       perform the requested operation. ")
+  @ApiModelProperty(value = "* 0 - Generic - is generic error * 1 - Client - means the client made an invalid request. * 2 - Internal - means there's a bug in the implementation. * 3 - RateLimited - is returned when the operation has been rate-limited. * 4 - Forbidden - is returned when the client doesn't have permission to perform the requested operation. ")
 
   public CodeEnum getCode() {
     return code;

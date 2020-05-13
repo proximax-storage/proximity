@@ -1,7 +1,10 @@
 package io.proximax.proximity.v1.model;
 
+import io.proximax.proximity.v1.model.ContractIdDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 import javax.validation.constraints.*;
 import javax.validation.Valid;
 
@@ -13,15 +16,51 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-12T22:55:04.259+02:00[Europe/Prague]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-13T22:46:24.699+02:00[Europe/Prague]")
 public class AccountInfoDTO   {
   
   private @Valid Long id;
   private @Valid String email;
 
+public enum EmailValidationEnum {
+
+    VALIDATED(String.valueOf("validated")), NOT_VALIDATED(String.valueOf("not_validated"));
+
+
+    private String value;
+
+    EmailValidationEnum (String v) {
+        value = v;
+    }
+
+    public String value() {
+        return value;
+    }
+
+    @Override
+    @JsonValue
+    public String toString() {
+        return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static EmailValidationEnum fromValue(String value) {
+        for (EmailValidationEnum b : EmailValidationEnum.values()) {
+            if (b.value.equals(value)) {
+                return b;
+            }
+        }
+        throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+}
+
+  private @Valid EmailValidationEnum emailValidation;
+  private @Valid String passwordHash;
+  private @Valid String token;
+
 public enum StatusEnum {
 
-    NEW(String.valueOf("new")), ACTIVE(String.valueOf("active")), INACTIVE(String.valueOf("inactive"));
+    ACTIVE(String.valueOf("active")), INACTIVE(String.valueOf("inactive"));
 
 
     private String value;
@@ -52,7 +91,7 @@ public enum StatusEnum {
 }
 
   private @Valid StatusEnum status;
-  private @Valid String token;
+  private @Valid List<ContractIdDTO> contracts = new ArrayList<>();
 
   /**
    * assigned account ID
@@ -94,8 +133,8 @@ public enum StatusEnum {
     this.email = email;
   }/**
    **/
-  public AccountInfoDTO status(StatusEnum status) {
-    this.status = status;
+  public AccountInfoDTO emailValidation(EmailValidationEnum emailValidation) {
+    this.emailValidation = emailValidation;
     return this;
   }
 
@@ -103,13 +142,32 @@ public enum StatusEnum {
 
   
   @ApiModelProperty(value = "")
-  @JsonProperty("status")
-  public StatusEnum getStatus() {
-    return status;
+  @JsonProperty("emailValidation")
+  public EmailValidationEnum getEmailValidation() {
+    return emailValidation;
   }
 
-  public void setStatus(StatusEnum status) {
-    this.status = status;
+  public void setEmailValidation(EmailValidationEnum emailValidation) {
+    this.emailValidation = emailValidation;
+  }/**
+   * password hash for authentication
+   **/
+  public AccountInfoDTO passwordHash(String passwordHash) {
+    this.passwordHash = passwordHash;
+    return this;
+  }
+
+  
+
+  
+  @ApiModelProperty(value = "password hash for authentication")
+  @JsonProperty("passwordHash")
+  public String getPasswordHash() {
+    return passwordHash;
+  }
+
+  public void setPasswordHash(String passwordHash) {
+    this.passwordHash = passwordHash;
   }/**
    * compact form of last JWT token
    **/
@@ -129,6 +187,42 @@ public enum StatusEnum {
 
   public void setToken(String token) {
     this.token = token;
+  }/**
+   **/
+  public AccountInfoDTO status(StatusEnum status) {
+    this.status = status;
+    return this;
+  }
+
+  
+
+  
+  @ApiModelProperty(value = "")
+  @JsonProperty("status")
+  public StatusEnum getStatus() {
+    return status;
+  }
+
+  public void setStatus(StatusEnum status) {
+    this.status = status;
+  }/**
+   **/
+  public AccountInfoDTO contracts(List<ContractIdDTO> contracts) {
+    this.contracts = contracts;
+    return this;
+  }
+
+  
+
+  
+  @ApiModelProperty(value = "")
+  @JsonProperty("contracts")
+  public List<ContractIdDTO> getContracts() {
+    return contracts;
+  }
+
+  public void setContracts(List<ContractIdDTO> contracts) {
+    this.contracts = contracts;
   }
 
   @Override
@@ -142,13 +236,16 @@ public enum StatusEnum {
     AccountInfoDTO accountInfoDTO = (AccountInfoDTO) o;
     return Objects.equals(this.id, accountInfoDTO.id) &&
         Objects.equals(this.email, accountInfoDTO.email) &&
+        Objects.equals(this.emailValidation, accountInfoDTO.emailValidation) &&
+        Objects.equals(this.passwordHash, accountInfoDTO.passwordHash) &&
+        Objects.equals(this.token, accountInfoDTO.token) &&
         Objects.equals(this.status, accountInfoDTO.status) &&
-        Objects.equals(this.token, accountInfoDTO.token);
+        Objects.equals(this.contracts, accountInfoDTO.contracts);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, email, status, token);
+    return Objects.hash(id, email, emailValidation, passwordHash, token, status, contracts);
   }
 
   @Override
@@ -158,8 +255,11 @@ public enum StatusEnum {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
-    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    emailValidation: ").append(toIndentedString(emailValidation)).append("\n");
+    sb.append("    passwordHash: ").append(toIndentedString(passwordHash)).append("\n");
     sb.append("    token: ").append(toIndentedString(token)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    contracts: ").append(toIndentedString(contracts)).append("\n");
     sb.append("}");
     return sb.toString();
   }

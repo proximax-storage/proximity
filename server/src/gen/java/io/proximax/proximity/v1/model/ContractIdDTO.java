@@ -14,49 +14,49 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen", date = "2020-05-13T22:46:24.699+02:00[Europe/Prague]")
-public class AccountLoginDTO   {
+public class ContractIdDTO   {
   
-  private @Valid String email;
-  private @Valid String password;
+  private @Valid Long id;
+  private @Valid String cid;
 
   /**
-   * e-mail address for account verification
+   * unique id of the contract
    **/
-  public AccountLoginDTO email(String email) {
-    this.email = email;
+  public ContractIdDTO id(Long id) {
+    this.id = id;
     return this;
   }
 
   
 
   
-  @ApiModelProperty(value = "e-mail address for account verification")
-  @JsonProperty("email")
-  public String getEmail() {
-    return email;
+  @ApiModelProperty(value = "unique id of the contract")
+  @JsonProperty("id")
+  public Long getId() {
+    return id;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public void setId(Long id) {
+    this.id = id;
   }/**
-   * account pasword
+   * CID of the contract
    **/
-  public AccountLoginDTO password(String password) {
-    this.password = password;
+  public ContractIdDTO cid(String cid) {
+    this.cid = cid;
     return this;
   }
 
   
 
   
-  @ApiModelProperty(value = "account pasword")
-  @JsonProperty("password")
-  public String getPassword() {
-    return password;
+  @ApiModelProperty(value = "CID of the contract")
+  @JsonProperty("cid")
+  public String getCid() {
+    return cid;
   }
 
-  public void setPassword(String password) {
-    this.password = password;
+  public void setCid(String cid) {
+    this.cid = cid;
   }
 
   @Override
@@ -67,23 +67,23 @@ public class AccountLoginDTO   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AccountLoginDTO accountLoginDTO = (AccountLoginDTO) o;
-    return Objects.equals(this.email, accountLoginDTO.email) &&
-        Objects.equals(this.password, accountLoginDTO.password);
+    ContractIdDTO contractIdDTO = (ContractIdDTO) o;
+    return Objects.equals(this.id, contractIdDTO.id) &&
+        Objects.equals(this.cid, contractIdDTO.cid);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(email, password);
+    return Objects.hash(id, cid);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AccountLoginDTO {\n");
+    sb.append("class ContractIdDTO {\n");
     
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
-    sb.append("    password: ").append(toIndentedString(password)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    cid: ").append(toIndentedString(cid)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -853,13 +853,27 @@ ul.nav-tabs {
       "type" : "string",
       "description" : "e-mail address for account verification"
     },
-    "status" : {
+    "emailValidation" : {
       "type" : "string",
-      "enum" : [ "new", "active", "inactive" ]
+      "enum" : [ "validated", "not_validated" ]
+    },
+    "passwordHash" : {
+      "type" : "string",
+      "description" : "password hash for authentication"
     },
     "token" : {
       "type" : "string",
       "description" : "compact form of last JWT token"
+    },
+    "status" : {
+      "type" : "string",
+      "enum" : [ "active", "inactive" ]
+    },
+    "contracts" : {
+      "type" : "array",
+      "items" : {
+        "$ref" : "#/components/schemas/contractIdDTO"
+      }
     }
   }
 };
@@ -937,6 +951,20 @@ ul.nav-tabs {
     "billingPeriod" : {
       "type" : "integer",
       "format" : "int"
+    }
+  }
+};
+    defs["contractIdDTO"] = {
+  "type" : "object",
+  "properties" : {
+    "id" : {
+      "type" : "integer",
+      "description" : "unique id of the contract",
+      "format" : "int64"
+    },
+    "cid" : {
+      "type" : "string",
+      "description" : "CID of the contract"
     }
   }
 };
