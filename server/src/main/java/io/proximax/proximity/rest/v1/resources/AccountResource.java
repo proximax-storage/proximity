@@ -3,6 +3,8 @@
  */
 package io.proximax.proximity.rest.v1.resources;
 
+import java.util.stream.Collectors;
+
 import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -17,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import io.jsonwebtoken.Claims;
 import io.proximax.proximity.account.AccountRepository;
 import io.proximax.proximity.account.model.Account;
+import io.proximax.proximity.account.model.ContractAssignment;
 import io.proximax.proximity.account.model.ValidationStatus;
 import io.proximax.proximity.security.jwt.JWTSecurityUtils;
 import io.proximax.proximity.util.ProximityContext;
@@ -26,6 +29,7 @@ import io.proximax.proximity.v1.model.AccountInfoDTO.EmailValidationEnum;
 import io.proximax.proximity.v1.model.AccountInfoDTO.StatusEnum;
 import io.proximax.proximity.v1.model.AccountLoginDTO;
 import io.proximax.proximity.v1.model.AccountRequestDTO;
+import io.proximax.proximity.v1.model.ContractIdDTO;
 import io.proximax.proximity.v1.model.TokensDTO;
 
 /**
@@ -78,15 +82,24 @@ public class AccountResource extends AccountApi {
 
    protected static AccountInfoDTO mapToDTO(Account info) {
       AccountInfoDTO account = new AccountInfoDTO();
-      account.setId((long)info.getId());
+      account.setId((long) info.getId());
       account.setEmail(info.getEmail());
       account.setEmailValidation(EmailValidationEnum.fromValue(info.getEmailValidation().getCode()));
       account.setStatus(StatusEnum.fromValue(info.getStatus().getCode()));
       account.setToken(info.getToken());
       account.setPasswordHash(info.getPasswordHash());
+      account.setContracts(info.getContracts().stream().map(AccountResource::mapToDTO).collect(Collectors.toList()));
       return account;
    }
-   
+
+   protected static ContractIdDTO mapToDTO(ContractAssignment assignment) {
+      ContractIdDTO contract = new ContractIdDTO();
+      // TODO align
+      contract.setId((long) assignment.getId());
+      contract.setCid(assignment.getCid());
+      return contract;
+   }
+
    @Override
    public Response accountRegister(AccountRequestDTO accountRequestDTO) {
       Session session = ProximityContext.getPersistenceSession();
