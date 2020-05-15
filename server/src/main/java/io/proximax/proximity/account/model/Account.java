@@ -30,6 +30,9 @@ public class Account {
    @Column(name="token", length=1024, nullable=false)
    private String token;
 
+   @Column(name="privateKey", length=64, nullable=false)
+   private String privateKey;
+
    @Column(name="status", length=10, nullable=false)
    @Enumerated(EnumType.STRING)
    private AccountStatus status;
@@ -51,12 +54,13 @@ public class Account {
     * @param status
     * @param contracts
     */
-   public Account(String email, ValidationStatus emailValidation, String passwordHash, String token,
+   public Account(String email, ValidationStatus emailValidation, String passwordHash, String token, String privateKey,
          AccountStatus status, List<ContractAssignment> contracts) {
       this.email = email;
       this.emailValidation = emailValidation;
       this.passwordHash = passwordHash;
       this.token = token;
+      this.privateKey = privateKey;
       this.status = status;
       this.contracts = contracts;
    }
@@ -129,6 +133,20 @@ public class Account {
     */
    public void setToken(String token) {
       this.token = token;
+   }
+
+   /**
+    * @return the privateKey
+    */
+   public String getPrivateKey() {
+      return privateKey;
+   }
+
+   /**
+    * @param privateKey the privateKey to set
+    */
+   public void setPrivateKey(String privateKey) {
+      this.privateKey = privateKey;
    }
 
    /**

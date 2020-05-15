@@ -21,6 +21,7 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.proximax.core.crypto.KeyPair;
 import io.proximax.proximity.ProximityProperty;
 import io.proximax.proximity.account.model.Account;
 import io.proximax.proximity.account.model.AccountStatus;
@@ -81,7 +82,7 @@ public class AccountRepository {
       // TODO need to generate new default contract for every new account
       return new ContractAssignment("baegbeibondkkrhxfprzwrlgxxltavqhweh2ylhu4hgo5lxjxpqbpfsw2lu");
    }
-   
+
    /**
     * login the user using specified credentials
     * 
@@ -119,10 +120,11 @@ public class AccountRepository {
          String token = JWTSecurityUtils.createAuthToken(login);
          // create contract and add it to the session
          ContractAssignment defaultContract = createNewContract();
+         String privateKey = new KeyPair().getPrivateKey().toString();
          session.save(defaultContract);
          // create account
          Account info = new Account(login, ValidationStatus.NOT_VALIDATED, passSvc.encryptPassword(password), token,
-               AccountStatus.ACTIVE, Arrays.asList(defaultContract));
+               privateKey, AccountStatus.ACTIVE, Arrays.asList(defaultContract));
          session.save(info);
          // commit the transaction
          tx.commit();

@@ -45,9 +45,9 @@ public class SchemaGen {
          throw new RuntimeException("failed to create session factory", e);
       }
 
-      File output = new File("server/schemas/database.sql");
+      File output = new File("schemas/database.sql");
       if (!output.delete()) {
-         throw new IllegalStateException("Failed to delete old DB file");
+         throw new IllegalStateException("Failed to delete old DB file " + output.getAbsolutePath());
       }
       
       SchemaExport export = new SchemaExport();

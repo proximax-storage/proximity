@@ -32,6 +32,7 @@
         email varchar(254) not null,
         email_validation varchar(16) not null,
         pwd_hash varchar(128) not null,
+        privateKey varchar(64) not null,
         status varchar(10) not null,
         token varchar(1024) not null,
         primary key (id)
