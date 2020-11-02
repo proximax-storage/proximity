@@ -12,7 +12,7 @@ import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.proximax.dfms.StorageApi;
+import io.proximax.dfms.DFMSClient;
 import io.proximax.proximity.drive.AuthenticatedDrive;
 
 /**
@@ -24,12 +24,12 @@ public class AuthenticatedDriveFactory implements Supplier<AuthenticatedDrive> {
    private static final Logger logger = LoggerFactory.getLogger(AuthenticatedDriveFactory.class);
 
    @Inject
-   private StorageApi storage;
+   private DFMSClient client;
 
    @Override
    public AuthenticatedDrive get() {
       logger.info("creating instance of AuthenticatedDrive");
-      return new AuthenticatedDrive(storage.createDriveRepository());
+      return new AuthenticatedDrive(client.createDriveServices());
    }
 
    public static class Binder extends AbstractBinder {

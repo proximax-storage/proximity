@@ -15,7 +15,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.proximax.dfms.DriveRepository;
+import io.proximax.dfms.DriveServices;
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.model.drive.DriveContent;
 import io.proximax.dfms.model.drive.DriveItem;
@@ -30,12 +30,12 @@ public class AuthenticatedDrive {
    private static final Logger logger = LoggerFactory.getLogger(AuthenticatedDrive.class);
 
    private static final String KEY_DEFAULT_CONTRACT = "io.proximax.proximity.defaultContract";
-   private final DriveRepository drive;
+   private final DriveServices drive;
    
    /**
     * 
     */
-   public AuthenticatedDrive(DriveRepository drive) {
+   public AuthenticatedDrive(DriveServices drive) {
       this.drive = drive;
    }
    

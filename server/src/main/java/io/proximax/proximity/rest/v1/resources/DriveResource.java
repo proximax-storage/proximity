@@ -5,6 +5,7 @@ package io.proximax.proximity.rest.v1.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,14 +18,16 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.StreamingOutput;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.proximax.dfms.cid.Cid;
 import io.proximax.dfms.cid.multibase.Multibase;
-import io.proximax.dfms.http.dtos.CidDTO;
+import io.proximax.dfms.gen.model.CidWrap;
 import io.proximax.dfms.model.drive.DriveContent;
 import io.proximax.dfms.model.drive.DriveItem;
 import io.proximax.dfms.model.drive.content.RawInputStreamContent;
@@ -67,7 +70,8 @@ public class DriveResource extends DriveApi {
          // forward the call
          Cid resp = drive.add(contract, dst, content).blockingFirst();
          // return cid as response
-         CidDTO cidDto = new CidDTO(resp.encode(Multibase.BASE_58_BTC));
+         CidWrap cidDto = new CidWrap();
+         cidDto.setId(resp.encode(Multibase.BASE_58_BTC));
          return Response.ok(cidDto).build();
       } catch (IOException e) {
          logger.warn("Failed to process request", e);
@@ -96,8 +100,21 @@ public class DriveResource extends DriveApi {
    @RequiresAuthentication
    @Override
    public Response driveGet(@NotNull String src, String cid, Boolean flush) {
-      // TODO Auto-generated method stub
-      throw new UnsupportedOperationException("not implemented yet");
+      logger.info("Getting content from {}:{}", cid, src);
+      Optional<Cid> contract = Optional.ofNullable(cid==null?null:Cid.decode(cid));
+         // get the content from the drive
+         final DriveContent content = drive.get(contract, src).blockingFirst();
+         // provide the response in the form of streamed data
+         StreamingOutput output = new StreamingOutput() {
+            @Override
+            public void write(OutputStream output) throws IOException {
+               try (InputStream data = content.getInputStream()) {
+                  IOUtils.copyLarge(data, output);
+                  output.flush();
+               }
+            }
+         };
+         return Response.ok(output).build();
    }
 
    @RequiresAuthentication
